@@ -77,7 +77,7 @@ function NavbarContent() {
 
   useEffect(() => {
     let cancelled = false;
-    fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000/api/v1"}/products/`)
+    fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000/api/v1"}/products/?limit=100`)
       .then((res) => (res.ok ? res.json() : []))
       .then((data) => {
         if (!cancelled && Array.isArray(data)) setProducts(data);

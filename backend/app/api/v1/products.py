@@ -14,7 +14,7 @@ router = APIRouter(prefix="/api/v1/products", tags=["Products"])
 async def list_products(
     category: str | None = None,
     q: str | None = None,
-    limit: int = Query(default=20, le=50),
+    limit: int = Query(default=20, le=200),
     offset: int = Query(default=0, ge=0),
     db: AsyncSession = Depends(get_db),
 ):

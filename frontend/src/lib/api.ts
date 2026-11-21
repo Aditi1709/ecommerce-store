@@ -28,7 +28,7 @@ export function formatPrice(priceMinor: number) {
 
 export async function getProducts(): Promise<Product[]> {
     try {
-      const res = await fetch(`${API_URL}/products/`, { cache: "no-store" });
+      const res = await fetch(`${API_URL}/products/?limit=100`, { cache: "no-store" });
       if (!res.ok) return [];
       const data = await res.json();
       return Array.isArray(data) ? data : [];

@@ -29,7 +29,7 @@ export default function WishlistPage() {
     let cancelled = false;
 
     const API_BASE = process.env.NEXT_PUBLIC_API_URL || `${process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000/api/v1"}`;
-    fetch(`${API_BASE}/products/`)
+    fetch(`${API_BASE}/products/?limit=100`)
       .then((res) => (res.ok ? res.json() : []))
       .then((data) => {
         if (!cancelled && Array.isArray(data)) setProducts(data);
