@@ -18,7 +18,7 @@ export interface LegalSection {
       sections: [
         {
           heading: "Who We Are",
-          body: "Storefront is an Indian multi-vendor e-commerce marketplace connecting independent merchants directly with everyday shoppers. We focus on curated apparel, footwear, electronics, and lifestyle essentials.",
+          body: "Zeno is an Indian multi-vendor e-commerce marketplace connecting independent merchants directly with everyday shoppers. We focus on curated apparel, footwear, electronics, and lifestyle essentials.",
         },
         {
           heading: "Our Mission",
@@ -52,7 +52,7 @@ export interface LegalSection {
       sections: [
         {
           heading: "Marketplace Role",
-          body: "Storefront operates as an online marketplace where registered merchants list and sell products. By placing an order, you agree to provide accurate delivery and payment details.",
+          body: "Zeno operates as an online marketplace where registered merchants list and sell products. By placing an order, you agree to provide accurate delivery and payment details.",
         },
         {
           heading: "Pricing & Availability",
@@ -180,7 +180,7 @@ export interface LegalSection {
         },
         {
           heading: "Officer Details",
-          body: "Name: Grievance Redressal Officer, Storefront • Email: grievance@storefront.in • Phone: +91-98765-43210 • Working Hours: Monday to Friday, 10:00 AM – 6:00 PM IST • Address: Bengaluru, Karnataka, India.",
+          body: "Name: Grievance Redressal Officer, Zeno • Email: grievance@zeno.in • Phone: +91-98765-43210 • Working Hours: Monday to Friday, 10:00 AM – 6:00 PM IST • Address: Bengaluru, Karnataka, India.",
         },
         {
           heading: "Resolution Timeline",
@@ -195,7 +195,7 @@ export interface LegalSection {
       sections: [
         {
           heading: "Verified Independent Merchants",
-          body: "Products on Storefront are listed and fulfilled by registered merchants who onboard via our Merchant Portal. Each merchant is responsible for product authenticity, accurate descriptions, and timely dispatch.",
+          body: "Products on Zeno are listed and fulfilled by registered merchants who onboard via our Merchant Portal. Each merchant is responsible for product authenticity, accurate descriptions, and timely dispatch.",
         },
         {
           heading: "Becoming a Seller",
@@ -210,7 +210,7 @@ export interface LegalSection {
       sections: [
         {
           heading: "Legal Entity Details",
-          body: "Trade Name: Storefront Marketplace • Registered Location: Bengaluru, Karnataka, India • Support Email: support@storefront.in.",
+          body: "Trade Name: Zeno Marketplace • Registered Location: Bengaluru, Karnataka, India • Support Email: support@zeno.in.",
         },
         {
           heading: "GST Information & Compliant Invoices",

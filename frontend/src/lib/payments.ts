@@ -97,7 +97,7 @@ export function downloadPaymentReceipt(tx: PaymentTransaction) {
 <html>
 <head><meta charset="utf-8"><title>Receipt ${tx.txId}</title></head>
 <body style="font-family:system-ui,sans-serif;max-width:680px;margin:40px auto;color:#111">
-  <h1>Storefront Marketplace — Payment Receipt</h1>
+  <h1>Zeno Marketplace — Payment Receipt</h1>
   <p style="color:#555;font-size:13px">GSTIN: 29XXXXX0000X1Z5 • Bengaluru, India</p>
   <hr />
   <p><strong>Transaction ID:</strong> ${tx.txId}</p>

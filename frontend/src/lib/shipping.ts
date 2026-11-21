@@ -339,7 +339,7 @@ export function downloadShippingLabel(s: ShipmentRecord) {
   <p><strong>WEIGHT:</strong> ${s.weightKg} kg &nbsp;|&nbsp; <strong>FEE:</strong> ₹${s.shippingFeeInr}</p>
   <hr />
   <p><strong>SHIP TO:</strong><br/>${s.destination}<br/>PIN: ${s.pincode} (${s.country})</p>
-  <p><strong>FROM:</strong><br/>Storefront Fulfillment Hub, Bengaluru 560001, India</p>
+  <p><strong>FROM:</strong><br/>Zeno Fulfillment Hub, Bengaluru 560001, India</p>
   <hr />
   <p style="font-size:11px">Pickup: ${s.pickupDate} (${s.pickupSlot}) • Generated ${new Date(s.createdAt).toLocaleString("en-IN")}</p>
 </body>

@@ -18,7 +18,7 @@ export default function Footer() {
     <footer className="bg-black text-white mt-20">
       <div className="max-w-6xl mx-auto px-6 py-14 grid grid-cols-1 md:grid-cols-4 gap-10">
         <div>
-          <h3 className="text-xl font-bold mb-3">Storefront</h3>
+          <h3 className="text-xl font-bold mb-3">Zeno</h3>
           <p className="text-sm text-gray-400">
             Multi-vendor marketplace for curated apparel, gear, and everyday essentials.
           </p>
@@ -81,7 +81,7 @@ export default function Footer() {
       </div>
 
       <div className="border-t border-gray-800 py-5 text-center text-xs text-gray-500">
-        © 2026 Storefront. All rights reserved.
+        © 2026 Zeno. All rights reserved.
       </div>
     </footer>
   );

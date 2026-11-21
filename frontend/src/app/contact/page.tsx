@@ -69,8 +69,8 @@ export default function ContactPage() {
         <section className="space-y-6 text-sm">
           <div className="border rounded-2xl p-5 space-y-1">
             <h3 className="font-semibold text-base">Customer Support & Legal Details</h3>
-            <p className="text-gray-600">Trade Name: Storefront Marketplace</p>
-            <p className="text-gray-600">Email: support@storefront.in</p>
+            <p className="text-gray-600">Trade Name: Zeno Marketplace</p>
+            <p className="text-gray-600">Email: support@zeno.in</p>
             <p className="text-gray-600">Phone: +91-98765-43210 (Mon–Sat, 10 AM – 6 PM IST)</p>
             <p className="text-gray-600">Address: Bengaluru, Karnataka, India</p>
             <p className="text-gray-600">GSTIN: 29XXXXX0000X1Z5</p>
@@ -78,8 +78,8 @@ export default function ContactPage() {
 
           <div className="border rounded-2xl p-5 space-y-1">
             <h3 className="font-semibold text-base">Grievance Officer</h3>
-            <p className="text-gray-600">Grievance Redressal Officer, Storefront</p>
-            <p className="text-gray-600">Email: grievance@storefront.in</p>
+            <p className="text-gray-600">Grievance Redressal Officer, Zeno</p>
+            <p className="text-gray-600">Email: grievance@zeno.in</p>
             <p className="text-gray-600">Acknowledgement within 48 hours • Resolution within 30 days</p>
           </div>
         </section>

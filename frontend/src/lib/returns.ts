@@ -115,7 +115,7 @@ export function sendAutoRefundNotification(
   const amount = `₹${(amountMinor / 100).toFixed(2)}`;
   const dest =
     method === "store_credit"
-      ? "your Storefront Wallet (instant store credit)"
+      ? "your Zeno Wallet (instant store credit)"
       : "your original payment method (3–5 business days)";
 
   const item: NotificationItem = {

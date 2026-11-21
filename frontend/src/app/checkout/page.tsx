@@ -377,7 +377,7 @@ export default function CheckoutPage() {
             order_id: createdOrderId,
             amount: Number((finalTotalMinor / 100).toFixed(2)),
             currency: "INR",
-            name: "Storefront",
+            name: "Zeno",
             description: `Order #${createdOrderId}`,
             handler: (response) => {
               const tx: PaymentTransaction = {

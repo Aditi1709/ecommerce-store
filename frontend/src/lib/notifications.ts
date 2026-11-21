@@ -45,7 +45,7 @@ const INITIAL_NOTIFICATIONS: NotificationItem[] = [
   {
     id: "ntf-1",
     event: "Welcome Email",
-    title: "Welcome to Storefront!",
+    title: "Welcome to Zeno!",
     message: "Your account is active. Enjoy ₹100 off your first order with code FIRST100.",
     category: "account",
     channels: ["email", "push"],
@@ -157,7 +157,7 @@ export interface NotificationTemplate {
 export const NOTIFICATION_TEMPLATES: NotificationTemplate[] = [
   {
     event: "Welcome Email",
-    title: "Welcome to Storefront!",
+    title: "Welcome to Zeno!",
     message: "Thanks for joining. Explore curated essentials from independent merchants.",
     category: "account",
     defaultChannels: ["email"],
@@ -174,7 +174,7 @@ export const NOTIFICATION_TEMPLATES: NotificationTemplate[] = [
   {
     event: "Password Reset Email",
     title: "Password Reset Requested",
-    message: "Use code 123456 to reset your Storefront password. Expires in 10 minutes.",
+    message: "Use code 123456 to reset your Zeno password. Expires in 10 minutes.",
     category: "account",
     defaultChannels: ["email"],
     link: "/forgot-password",
@@ -278,7 +278,7 @@ export const NOTIFICATION_TEMPLATES: NotificationTemplate[] = [
   {
     event: "Newsletter",
     title: "Weekly New Arrivals Digest",
-    message: "Fresh drops from independent merchants are live on Storefront.",
+    message: "Fresh drops from independent merchants are live on Zeno.",
     category: "marketing",
     defaultChannels: ["email"],
     link: "/",

@@ -44,7 +44,7 @@ export default function ProductCard({ product }: ProductCardProps) {
         className="relative aspect-[4/5] w-full overflow-hidden rounded-2xl bg-[#F2EFE9] border border-[#E7E2D8] shadow-sm group-hover:shadow-md transition-shadow"
       >
         <img
-          src={primaryVariant?.image_url || "https://placehold.co/600x750/EBF3EF/0F3D2E?text=Storefront"}
+          src={primaryVariant?.image_url || "https://placehold.co/600x750/EBF3EF/0F3D2E?text=Zeno"}
           alt={product.name}
           className="h-full w-full object-cover object-center transition-transform duration-500 ease-out group-hover:scale-105"
         />

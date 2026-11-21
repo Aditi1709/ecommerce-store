@@ -109,7 +109,7 @@ export default function OrderTrackingPage() {
         <div>
           <h1 className="text-3xl font-bold">Order Tracking</h1>
           <p className="text-sm text-gray-500 mt-1">
-            Live order status synced directly with your Storefront database.
+            Live order status synced directly with your Zeno database.
           </p>
         </div>
 

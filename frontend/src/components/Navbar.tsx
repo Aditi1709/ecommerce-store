@@ -159,7 +159,7 @@ function NavbarContent() {
         {/* Logo + Mega Menu Trigger */}
         <div className="flex items-center gap-6">
           <Link href="/" className="text-xl font-bold shrink-0">
-            Storefront
+            Zeno
           </Link>
 
           <div

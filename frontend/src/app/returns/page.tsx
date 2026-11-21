@@ -151,7 +151,7 @@ export default function ReturnsPortalPage() {
         <div>
           <h1 className="text-3xl font-bold">Returns, Refunds & Cancellations</h1>
           <p className="text-sm text-gray-500 mt-1">
-            Synced directly with your Storefront PostgreSQL database.
+            Synced directly with your Zeno PostgreSQL database.
           </p>
         </div>
         <Link href="/info/return-policy" className="px-3.5 py-2 border rounded-lg text-xs hover:bg-gray-50">

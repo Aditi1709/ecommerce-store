@@ -13,10 +13,10 @@ const FAQS = [
   },
   {
     q: "How do I return or exchange an item?",
-    a: "You can request a return or size exchange within 7 days of delivery by contacting support@storefront.in with your Order ID.",
+    a: "You can request a return or size exchange within 7 days of delivery by contacting support@zeno.in with your Order ID.",
   },
   {
-    q: "Can I sell my own products on Storefront?",
+    q: "Can I sell my own products on Zeno?",
     a: "Yes! Click 'Sign Up', choose 'Merchant (Seller)', and you will immediately get access to the Merchant Portal to upload product images, prices, and stock.",
   },
   {
