@@ -1,9 +1,8 @@
+import sys
+from pathlib import Path
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-
-import sys
-from pathlib import Path
 
 _BACKEND_DIR = str(Path(__file__).resolve().parent.parent)
 if _BACKEND_DIR not in sys.path:
@@ -12,10 +11,10 @@ if _BACKEND_DIR not in sys.path:
 try:
     from seed_womens import reseed_womens
 except Exception as _seed_err:
+    print("Warning importing seed_womens:", _seed_err)
     reseed_womens = None
 
 from app.core.database import engine
-from seed_womens import reseed_womens
 from app.models.product import Base
 from app.models import (
     address,
@@ -43,7 +42,11 @@ from app.api.v1 import (
 async def lifespan(app: FastAPI):
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
-    await reseed_womens(force=False)
+    if reseed_womens is not None:
+        try:
+            await reseed_womens(force=False)
+        except Exception as exc:
+            print("Startup reseed warning:", exc)
     yield
 
 
@@ -58,7 +61,9 @@ app.add_middleware(
     allow_origins=[
         "http://localhost:3000",
         "http://127.0.0.1:3000",
+        "https://ecommerce-store-bay-five.vercel.app",
     ],
+    allow_origin_regex=r"https://.*\.vercel\.app",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
