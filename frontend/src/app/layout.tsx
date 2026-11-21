@@ -20,7 +20,7 @@ const outfit = Outfit({
 });
 
 export const metadata: Metadata = {
-  title: "STOREFRONT — Modern Essentials",
+  title: "Zeno",
   description: "Thoughtfully designed essentials from independent merchants.",
 };
 
