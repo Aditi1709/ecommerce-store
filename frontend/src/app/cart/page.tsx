@@ -121,7 +121,7 @@ export default function CartPage() {
         {items.length > 0 && (
           <button
             onClick={handleShareCart}
-            className="px-4 py-2 border rounded-lg text-sm font-medium hover:bg-gray-50"
+            className="px-4 py-2 border rounded-lg text-sm font-medium hover:bg-[#FAD2D8]/30"
           >
             {shareCopied ? "Share / Sync Link Copied ✓" : "Share / Sync Cart Link"}
           </button>
@@ -141,7 +141,7 @@ export default function CartPage() {
                 setDismissedShare(true);
                 window.history.replaceState({}, "", "/cart");
               }}
-              className="px-4 py-1.5 bg-black text-white rounded-lg text-xs font-medium"
+              className="px-4 py-1.5 bg-[#C81E1E] text-white rounded-lg text-xs font-medium"
             >
               Restore Items to My Cart
             </button>
@@ -157,7 +157,7 @@ export default function CartPage() {
 
       {/* Free Shipping Progress Bar */}
       {items.length > 0 && (
-        <div className="border rounded-xl p-4 bg-gray-50 space-y-2">
+        <div className="border rounded-xl p-4 bg-[#FAD2D8]/30 space-y-2">
           <div className="flex justify-between text-sm">
             {freeShippingRemaining === 0 ? (
               <span className="font-semibold text-green-700">
@@ -188,7 +188,7 @@ export default function CartPage() {
           </p>
           <Link
             href="/"
-            className="inline-block px-6 py-3 bg-black text-white rounded-lg text-sm font-medium hover:bg-gray-800"
+            className="inline-block px-6 py-3 bg-[#C81E1E] text-white rounded-lg text-sm font-medium hover:bg-[#A81818]"
           >
             Continue Shopping
           </Link>
@@ -264,14 +264,14 @@ export default function CartPage() {
                       <div className="flex items-center border rounded-lg">
                         <button
                           onClick={() => updateQuantity(item.variantId, item.quantity - 1)}
-                          className="px-3 py-1 text-sm hover:bg-gray-100"
+                          className="px-3 py-1 text-sm hover:bg-[#FAD5DC]"
                         >
                           −
                         </button>
                         <span className="px-3 py-1 text-sm font-medium">{item.quantity}</span>
                         <button
                           onClick={() => updateQuantity(item.variantId, item.quantity + 1)}
-                          className="px-3 py-1 text-sm hover:bg-gray-100"
+                          className="px-3 py-1 text-sm hover:bg-[#FAD5DC]"
                         >
                           +
                         </button>
@@ -363,7 +363,7 @@ export default function CartPage() {
                     setCouponMsg(res.message);
                     if (res.ok) setCouponInput("");
                   }}
-                  className="px-4 py-2 bg-black text-white rounded-lg text-xs font-medium hover:bg-gray-800"
+                  className="px-4 py-2 bg-[#C81E1E] text-white rounded-lg text-xs font-medium hover:bg-[#A81818]"
                 >
                   Apply
                 </button>
@@ -415,7 +415,7 @@ export default function CartPage() {
 
             <Link
               href="/checkout"
-              className="block w-full text-center bg-black text-white py-3 rounded-lg font-medium hover:bg-gray-800 transition"
+              className="block w-full text-center bg-[#C81E1E] text-white py-3 rounded-lg font-medium hover:bg-[#A81818] transition"
             >
               Proceed to Checkout
             </Link>
@@ -443,7 +443,7 @@ export default function CartPage() {
                 <div className="flex gap-2">
                   <button
                     onClick={() => moveSavedToCart(item.variantId)}
-                    className="flex-1 py-1.5 bg-black text-white rounded-lg text-xs"
+                    className="flex-1 py-1.5 bg-[#C81E1E] text-white rounded-lg text-xs"
                   >
                     Move to Cart
                   </button>
@@ -479,7 +479,7 @@ export default function CartPage() {
                 <div className="flex gap-2">
                   <button
                     onClick={() => moveWishlistToCart(item.variantId)}
-                    className="flex-1 py-1.5 bg-black text-white rounded-lg text-xs"
+                    className="flex-1 py-1.5 bg-[#C81E1E] text-white rounded-lg text-xs"
                   >
                     Add to Cart
                   </button>
@@ -533,7 +533,7 @@ export default function CartPage() {
                             imageUrl: v.image_url,
                           })
                         }
-                        className="w-full py-2 bg-black text-white rounded-lg text-xs font-medium hover:bg-gray-800"
+                        className="w-full py-2 bg-[#C81E1E] text-white rounded-lg text-xs font-medium hover:bg-[#A81818]"
                       >
                         Quick Add
                       </button>

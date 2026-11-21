@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { Product, formatPrice } from "@/lib/api";
+import { getAestheticImage } from "@/lib/productImage";
 import { useCart } from "@/context/CartContext";
 
 export default function ProductView({ product }: { product: Product }) {
@@ -63,8 +64,8 @@ export default function ProductView({ product }: { product: Product }) {
                   onClick={() => setSelected(v)}
                   className={`px-4 py-2 rounded-lg border text-sm font-medium transition ${
                     isSelected
-                      ? "bg-black text-white border-black"
-                      : "bg-white text-black hover:border-black"
+                      ? "bg-[#C81E1E] text-white border-[#C81E1E]"
+                      : "bg-white text-black hover:border-[#C81E1E]"
                   }`}
                 >
                   {label}
@@ -83,7 +84,7 @@ export default function ProductView({ product }: { product: Product }) {
         <button
           onClick={handleAdd}
           disabled={!selected || selected.stock_qty === 0}
-          className="mt-6 w-full bg-black text-white py-3 rounded-lg font-medium hover:bg-gray-800 disabled:bg-gray-300 transition"
+          className="mt-6 w-full bg-[#C81E1E] text-white py-3 rounded-lg font-medium hover:bg-[#A81818] disabled:bg-gray-300 transition"
         >
           {added ? "Added to Cart ✓" : "Add to Cart"}
         </button>

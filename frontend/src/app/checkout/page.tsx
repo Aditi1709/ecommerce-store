@@ -475,7 +475,7 @@ export default function CheckoutPage() {
       <main className="max-w-3xl mx-auto px-6 py-16 text-center space-y-4">
         <h1 className="text-2xl font-bold">Your cart is empty</h1>
         <div className="flex justify-center gap-3">
-          <Link href="/" className="px-6 py-3 bg-black text-white rounded-lg text-sm">
+          <Link href="/" className="px-6 py-3 bg-[#C81E1E] text-white rounded-lg text-sm">
             Return to Store
           </Link>
           <Link href="/payments" className="px-6 py-3 border rounded-lg text-sm">
@@ -509,10 +509,10 @@ export default function CheckoutPage() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div className="lg:col-span-2 space-y-6">
           {/* 1. ACCOUNT */}
-          <section className="border rounded-2xl p-6 bg-white space-y-4">
+          <section className="border rounded-2xl p-6 bg-[#FFFDFB] space-y-4">
             <h2 className="text-lg font-bold">1. Account & Contact Verification</h2>
             {user ? (
-              <div className="text-sm bg-gray-50 p-4 rounded-xl flex items-center justify-between">
+              <div className="text-sm bg-[#FAF3EB] p-4 rounded-xl flex items-center justify-between">
                 <div>
                   <p className="font-semibold">{user.name}</p>
                   <p className="text-gray-500">{user.email}</p>
@@ -530,7 +530,7 @@ export default function CheckoutPage() {
                       type="button"
                       onClick={() => setAuthMode(mode)}
                       className={`px-4 py-1.5 rounded-lg text-xs font-medium ${
-                        authMode === mode ? "bg-black text-white" : "bg-gray-100 text-gray-700"
+                        authMode === mode ? "bg-[#C81E1E] text-white" : "bg-gray-100 text-gray-700"
                       }`}
                     >
                       {mode === "guest" ? "Guest Checkout" : mode === "login" ? "Login" : "Sign Up"}
@@ -560,7 +560,7 @@ export default function CheckoutPage() {
                         <button
                           type="button"
                           onClick={() => guestEmail.includes("@") && setEmailOtpSent(true)}
-                          className="px-3 py-2 border rounded-lg text-xs hover:bg-gray-50"
+                          className="px-3 py-2 border rounded-lg text-xs hover:bg-[#FAF3EB]"
                         >
                           Verify
                         </button>
@@ -569,12 +569,12 @@ export default function CheckoutPage() {
                       )}
                     </div>
                     {emailOtpSent && !emailVerified && (
-                      <div className="sm:col-span-2 flex items-center gap-2 bg-gray-50 p-2.5 rounded-lg text-xs">
+                      <div className="sm:col-span-2 flex items-center gap-2 bg-[#FAF3EB] p-2.5 rounded-lg text-xs">
                         <span>Email OTP (demo: <strong>1234</strong>):</span>
                         <input
                           value={emailOtpInput}
                           onChange={(e) => setEmailOtpInput(e.target.value)}
-                          className="border rounded px-2 py-1 w-20 bg-white"
+                          className="border rounded px-2 py-1 w-20 bg-[#FFFDFB]"
                         />
                         <button
                           type="button"
@@ -584,7 +584,7 @@ export default function CheckoutPage() {
                               setEmailOtpSent(false);
                             }
                           }}
-                          className="px-3 py-1 bg-black text-white rounded"
+                          className="px-3 py-1 bg-[#C81E1E] text-white rounded"
                         >
                           Confirm
                         </button>
@@ -598,7 +598,7 @@ export default function CheckoutPage() {
                     )}
                     <input required type="email" placeholder="Email" value={authEmail} onChange={(e) => setAuthEmail(e.target.value)} className="w-full border rounded-lg px-3 py-2" />
                     <input required type="password" placeholder="Password" value={authPassword} onChange={(e) => setAuthPassword(e.target.value)} className="w-full border rounded-lg px-3 py-2" />
-                    <button className="px-5 py-2 bg-black text-white rounded-lg text-xs font-medium">
+                    <button className="px-5 py-2 bg-[#C81E1E] text-white rounded-lg text-xs font-medium">
                       {authMode === "login" ? "Login & Continue" : "Sign Up & Continue"}
                     </button>
                     {authMsg && <p className="text-xs text-red-600">{authMsg}</p>}
@@ -623,7 +623,7 @@ export default function CheckoutPage() {
                   <button
                     type="button"
                     onClick={() => phone.trim().length >= 10 && setPhoneOtpSent(true)}
-                    className="px-3 py-2 border rounded-lg text-xs hover:bg-gray-50"
+                    className="px-3 py-2 border rounded-lg text-xs hover:bg-[#FAF3EB]"
                   >
                     Verify Phone
                   </button>
@@ -632,9 +632,9 @@ export default function CheckoutPage() {
                 )}
               </div>
               {phoneOtpSent && !phoneVerified && (
-                <div className="flex items-center gap-2 bg-gray-50 p-2.5 rounded-lg text-xs max-w-md">
+                <div className="flex items-center gap-2 bg-[#FAF3EB] p-2.5 rounded-lg text-xs max-w-md">
                   <span>SMS OTP (demo: <strong>1234</strong>):</span>
-                  <input value={phoneOtpInput} onChange={(e) => setPhoneOtpInput(e.target.value)} className="border rounded px-2 py-1 w-20 bg-white" />
+                  <input value={phoneOtpInput} onChange={(e) => setPhoneOtpInput(e.target.value)} className="border rounded px-2 py-1 w-20 bg-[#FFFDFB]" />
                   <button
                     type="button"
                     onClick={() => {
@@ -643,7 +643,7 @@ export default function CheckoutPage() {
                         setPhoneOtpSent(false);
                       }
                     }}
-                    className="px-3 py-1 bg-black text-white rounded"
+                    className="px-3 py-1 bg-[#C81E1E] text-white rounded"
                   >
                     Confirm
                   </button>
@@ -653,10 +653,10 @@ export default function CheckoutPage() {
           </section>
 
           {/* 2. ADDRESSES */}
-          <section className="border rounded-2xl p-6 bg-white space-y-4">
+          <section className="border rounded-2xl p-6 bg-[#FFFDFB] space-y-4">
             <div className="flex items-center justify-between">
               <h2 className="text-lg font-bold">2. Shipping & Billing Address</h2>
-              <button type="button" onClick={openNewAddressForm} className="text-xs px-3 py-1.5 bg-black text-white rounded-lg">
+              <button type="button" onClick={openNewAddressForm} className="text-xs px-3 py-1.5 bg-[#C81E1E] text-white rounded-lg">
                 + Add New Address
               </button>
             </div>
@@ -670,7 +670,7 @@ export default function CheckoutPage() {
                       key={addr.id}
                       onClick={() => setSelectedAddressId(addr.id)}
                       className={`border rounded-xl p-4 cursor-pointer text-sm space-y-1 ${
-                        isSelected ? "border-black bg-gray-50" : "hover:border-gray-400"
+                        isSelected ? "border-[#C81E1E] bg-[#FAD2D8]/45" : "hover:border-gray-400"
                       }`}
                     >
                       <div className="flex items-center justify-between">
@@ -692,24 +692,24 @@ export default function CheckoutPage() {
             )}
 
             {showAddrForm && (
-              <form onSubmit={handleSaveAddress} className="border rounded-xl p-4 bg-gray-50 grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
-                <input required placeholder="Label (Home / Office)" value={addrLabel} onChange={(e) => setAddrLabel(e.target.value)} className="border rounded-lg px-3 py-2 bg-white" />
-                <input required placeholder="Recipient Name" value={addrFullName} onChange={(e) => setAddrFullName(e.target.value)} className="border rounded-lg px-3 py-2 bg-white" />
-                <input required placeholder="Phone Number" value={addrPhone} onChange={(e) => setAddrPhone(e.target.value)} className="border rounded-lg px-3 py-2 bg-white" />
+              <form onSubmit={handleSaveAddress} className="border rounded-xl p-4 bg-[#FAF3EB] grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
+                <input required placeholder="Label (Home / Office)" value={addrLabel} onChange={(e) => setAddrLabel(e.target.value)} className="border rounded-lg px-3 py-2 bg-[#FFFDFB]" />
+                <input required placeholder="Recipient Name" value={addrFullName} onChange={(e) => setAddrFullName(e.target.value)} className="border rounded-lg px-3 py-2 bg-[#FFFDFB]" />
+                <input required placeholder="Phone Number" value={addrPhone} onChange={(e) => setAddrPhone(e.target.value)} className="border rounded-lg px-3 py-2 bg-[#FFFDFB]" />
                 <div>
-                  <input required placeholder="6-Digit Pincode" value={addrPincode} onChange={(e) => setAddrPincode(e.target.value)} className="w-full border rounded-lg px-3 py-2 bg-white" />
+                  <input required placeholder="6-Digit Pincode" value={addrPincode} onChange={(e) => setAddrPincode(e.target.value)} className="w-full border rounded-lg px-3 py-2 bg-[#FFFDFB]" />
                   {addrPincode && (
                     <p className={`text-[11px] mt-1 ${isValidIndianPincode(addrPincode) ? "text-green-700" : "text-red-600"}`}>
                       {isValidIndianPincode(addrPincode) ? "✓ Delivery available" : "Invalid 6-digit pincode"}
                     </p>
                   )}
                 </div>
-                <input required placeholder="House No, Street, Area" value={addrLine1} onChange={(e) => setAddrLine1(e.target.value)} className="sm:col-span-2 border rounded-lg px-3 py-2 bg-white" />
-                <input required placeholder="City" value={addrCity} onChange={(e) => setAddrCity(e.target.value)} className="border rounded-lg px-3 py-2 bg-white" />
-                <input required placeholder="State" value={addrState} onChange={(e) => setAddrState(e.target.value)} className="border rounded-lg px-3 py-2 bg-white" />
+                <input required placeholder="House No, Street, Area" value={addrLine1} onChange={(e) => setAddrLine1(e.target.value)} className="sm:col-span-2 border rounded-lg px-3 py-2 bg-[#FFFDFB]" />
+                <input required placeholder="City" value={addrCity} onChange={(e) => setAddrCity(e.target.value)} className="border rounded-lg px-3 py-2 bg-[#FFFDFB]" />
+                <input required placeholder="State" value={addrState} onChange={(e) => setAddrState(e.target.value)} className="border rounded-lg px-3 py-2 bg-[#FFFDFB]" />
                 <div className="sm:col-span-2 flex gap-2">
-                  <button className="px-4 py-2 bg-black text-white rounded-lg text-xs font-medium">{editingAddrId ? "Update" : "Save Address"}</button>
-                  <button type="button" onClick={() => setShowAddrForm(false)} className="px-4 py-2 border rounded-lg text-xs bg-white">Cancel</button>
+                  <button className="px-4 py-2 bg-[#C81E1E] text-white rounded-lg text-xs font-medium">{editingAddrId ? "Update" : "Save Address"}</button>
+                  <button type="button" onClick={() => setShowAddrForm(false)} className="px-4 py-2 border rounded-lg text-xs bg-[#FFFDFB]">Cancel</button>
                 </div>
               </form>
             )}
@@ -726,10 +726,10 @@ export default function CheckoutPage() {
           </section>
 
           {/* 3. DELIVERY OPTIONS */}
-          <section className="border rounded-2xl p-6 bg-white space-y-3">
+          <section className="border rounded-2xl p-6 bg-[#FFFDFB] space-y-3">
             <h2 className="text-lg font-bold">3. Delivery Options</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
-              <label className={`border rounded-xl p-4 cursor-pointer flex justify-between ${deliveryOption === "standard" ? "border-black bg-gray-50" : ""}`}>
+              <label className={`border rounded-xl p-4 cursor-pointer flex justify-between ${deliveryOption === "standard" ? "border-[#C81E1E] bg-[#FAD2D8]/45" : ""}`}>
                 <div className="flex gap-2">
                   <input type="radio" checked={deliveryOption === "standard"} onChange={() => setDeliveryOption("standard")} />
                   <div>
@@ -739,7 +739,7 @@ export default function CheckoutPage() {
                 </div>
                 <span className="font-bold">{shippingMinor === 0 ? "FREE" : formatPrice(shippingMinor)}</span>
               </label>
-              <label className={`border rounded-xl p-4 cursor-pointer flex justify-between ${deliveryOption === "express" ? "border-black bg-gray-50" : ""}`}>
+              <label className={`border rounded-xl p-4 cursor-pointer flex justify-between ${deliveryOption === "express" ? "border-[#C81E1E] bg-[#FAD2D8]/45" : ""}`}>
                 <div className="flex gap-2">
                   <input type="radio" checked={deliveryOption === "express"} onChange={() => setDeliveryOption("express")} />
                   <div>
@@ -754,7 +754,7 @@ export default function CheckoutPage() {
           </section>
 
           {/* 4. ALL 7 PAYMENT METHODS + GATEWAY */}
-          <section className="border rounded-2xl p-6 bg-white space-y-5">
+          <section className="border rounded-2xl p-6 bg-[#FFFDFB] space-y-5">
             <div className="flex flex-wrap items-center justify-between gap-2">
               <h2 className="text-lg font-bold">4. Payment Method</h2>
               <span className="text-xs text-gray-500">Powered by YouPI-PG &amp; SecurePay</span>
@@ -767,7 +767,7 @@ export default function CheckoutPage() {
                   type="button"
                   onClick={() => setPaymentMethod(m)}
                   className={`py-2.5 px-3 rounded-xl border font-medium transition ${
-                    paymentMethod === m ? "bg-black text-white border-black" : "hover:border-black"
+                    paymentMethod === m ? "bg-[#C81E1E] text-white border-[#C81E1E]" : "hover:border-[#C81E1E]"
                   }`}
                 >
                   {METHOD_LABELS[m]}
@@ -777,7 +777,7 @@ export default function CheckoutPage() {
 
             {/* Method-specific fields */}
             {paymentMethod === "upi" && (
-              <div className="border rounded-xl p-4 bg-gray-50 space-y-2 text-sm">
+              <div className="border rounded-xl p-4 bg-[#FAF3EB] space-y-2 text-sm">
                 <div className="flex items-center justify-between">
                   <p className="font-semibold">Instant UPI via YouPI-PG</p>
                   <span className="text-[11px] px-2 py-0.5 rounded-full bg-green-100 text-green-800 font-medium">
@@ -791,26 +791,26 @@ export default function CheckoutPage() {
             )}
 
             {(paymentMethod === "credit_card" || paymentMethod === "debit_card") && (
-              <div className="border rounded-xl p-4 bg-gray-50 grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
+              <div className="border rounded-xl p-4 bg-[#FAF3EB] grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
                 <input
                   placeholder="Cardholder Name"
                   value={cardName}
                   onChange={(e) => setCardName(e.target.value)}
-                  className="sm:col-span-2 border rounded-lg px-3 py-2 bg-white"
+                  className="sm:col-span-2 border rounded-lg px-3 py-2 bg-[#FFFDFB]"
                 />
                 <input
                   placeholder="Card Number (16 digits)"
                   maxLength={19}
                   value={cardNumber}
                   onChange={(e) => setCardNumber(e.target.value)}
-                  className="sm:col-span-2 border rounded-lg px-3 py-2 bg-white font-mono"
+                  className="sm:col-span-2 border rounded-lg px-3 py-2 bg-[#FFFDFB] font-mono"
                 />
                 <input
                   placeholder="Expiry (MM/YY)"
                   maxLength={5}
                   value={cardExpiry}
                   onChange={(e) => setCardExpiry(e.target.value)}
-                  className="border rounded-lg px-3 py-2 bg-white"
+                  className="border rounded-lg px-3 py-2 bg-[#FFFDFB]"
                 />
                 <input
                   type="password"
@@ -818,15 +818,15 @@ export default function CheckoutPage() {
                   maxLength={4}
                   value={cardCvv}
                   onChange={(e) => setCardCvv(e.target.value)}
-                  className="border rounded-lg px-3 py-2 bg-white"
+                  className="border rounded-lg px-3 py-2 bg-[#FFFDFB]"
                 />
               </div>
             )}
 
             {paymentMethod === "net_banking" && (
-              <div className="border rounded-xl p-4 bg-gray-50 space-y-2 text-sm">
+              <div className="border rounded-xl p-4 bg-[#FAF3EB] space-y-2 text-sm">
                 <p className="font-medium">Select Your Bank</p>
-                <select value={bankName} onChange={(e) => setBankName(e.target.value)} className="w-full border rounded-lg px-3 py-2 bg-white">
+                <select value={bankName} onChange={(e) => setBankName(e.target.value)} className="w-full border rounded-lg px-3 py-2 bg-[#FFFDFB]">
                   {["HDFC Bank", "ICICI Bank", "State Bank of India (SBI)", "Axis Bank", "Kotak Mahindra Bank"].map((b) => (
                     <option key={b} value={b}>{b}</option>
                   ))}
@@ -835,7 +835,7 @@ export default function CheckoutPage() {
             )}
 
             {paymentMethod === "wallet" && (
-              <div className="border rounded-xl p-4 bg-gray-50 space-y-2 text-sm">
+              <div className="border rounded-xl p-4 bg-[#FAF3EB] space-y-2 text-sm">
                 <p className="font-medium">Select Digital Wallet</p>
                 <div className="grid grid-cols-2 gap-2">
                   {["PhonePe Wallet", "Paytm Wallet", "Amazon Pay", "Mobikwik"].map((w) => (
@@ -844,7 +844,7 @@ export default function CheckoutPage() {
                       type="button"
                       onClick={() => setWalletName(w)}
                       className={`py-2 px-3 rounded-lg border text-xs font-medium ${
-                        walletName === w ? "bg-black text-white border-black" : "bg-white"
+                        walletName === w ? "bg-[#C81E1E] text-white border-[#C81E1E]" : "bg-[#FFFDFB]"
                       }`}
                     >
                       {w}
@@ -855,8 +855,8 @@ export default function CheckoutPage() {
             )}
 
             {paymentMethod === "emi" && (
-              <div className="border rounded-xl p-4 bg-gray-50 space-y-3 text-sm">
-                <select value={emiBank} onChange={(e) => setEmiBank(e.target.value)} className="w-full border rounded-lg px-3 py-2 bg-white">
+              <div className="border rounded-xl p-4 bg-[#FAF3EB] space-y-3 text-sm">
+                <select value={emiBank} onChange={(e) => setEmiBank(e.target.value)} className="w-full border rounded-lg px-3 py-2 bg-[#FFFDFB]">
                   {["HDFC Bank", "ICICI Bank", "Axis Bank", "SBI Card"].map((b) => (
                     <option key={b} value={b}>{b} No-Cost EMI</option>
                   ))}
@@ -868,7 +868,7 @@ export default function CheckoutPage() {
                       type="button"
                       onClick={() => setEmiMonths(m)}
                       className={`p-2.5 rounded-lg border text-left ${
-                        emiMonths === m ? "bg-black text-white border-black" : "bg-white"
+                        emiMonths === m ? "bg-[#C81E1E] text-white border-[#C81E1E]" : "bg-[#FFFDFB]"
                       }`}
                     >
                       <p className="font-bold">{m} Months</p>
@@ -880,7 +880,7 @@ export default function CheckoutPage() {
             )}
 
             {paymentMethod === "cod" && (
-              <p className="text-xs text-gray-600 bg-gray-50 p-3 rounded-xl border">
+              <p className="text-xs text-gray-600 bg-[#FAF3EB] p-3 rounded-xl border">
                 Pay in cash or UPI directly to the delivery partner when your order arrives.
               </p>
             )}
@@ -895,7 +895,7 @@ export default function CheckoutPage() {
                     type="button"
                     onClick={() => setGatewayMode(m)}
                     className={`px-2.5 py-1 rounded border capitalize ${
-                      gatewayMode === m ? "bg-gray-900 text-white border-gray-900" : "bg-white"
+                      gatewayMode === m ? "bg-[#C81E1E] text-white border-[#C81E1E]" : "bg-[#FFFDFB]"
                     }`}
                   >
                     {m}
@@ -907,7 +907,7 @@ export default function CheckoutPage() {
         </div>
 
         {/* ORDER SUMMARY */}
-        <aside className="border rounded-2xl p-6 bg-white h-fit space-y-5">
+        <aside className="border rounded-2xl p-6 bg-[#FFFDFB] h-fit space-y-5">
           <h2 className="text-lg font-bold">Order Summary ({items.length})</h2>
           <div className="space-y-2 text-sm max-h-48 overflow-y-auto border-b pb-3">
             {items.map((i) => (
@@ -928,7 +928,7 @@ export default function CheckoutPage() {
                   setCouponMsg(res.message);
                   if (res.ok) setCouponInput("");
                 }}
-                className="px-3 py-2 bg-black text-white rounded-lg text-xs font-medium"
+                className="px-3 py-2 bg-[#C81E1E] text-white rounded-lg text-xs font-medium"
               >
                 Apply
               </button>
@@ -959,7 +959,7 @@ export default function CheckoutPage() {
             type="button"
             disabled={submitting}
             onClick={handlePlaceOrder}
-            className="w-full bg-black text-white py-3.5 rounded-xl font-semibold hover:bg-gray-800 disabled:bg-gray-400 transition"
+            className="w-full bg-[#C81E1E] text-white py-3.5 rounded-xl font-semibold hover:bg-[#A81818] disabled:bg-gray-400 transition"
           >
             {submitting ? "Processing Secure Payment..." : `Pay ${formatPrice(finalTotalMinor)}`}
           </button>
