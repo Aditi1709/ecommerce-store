@@ -236,10 +236,18 @@ async def reseed_womens(force: bool = True):
                 print("Women's & Girls' Wear catalog already active.")
                 return
 
-        await db.execute(
-            text("TRUNCATE TABLE order_items, orders, product_variants, products, categories RESTART IDENTITY CASCADE")
-        )
-        await db.commit()
+        # Dynamically truncate product/category and dependent tables using actual metadata table names
+        keep_tables = {"users", "addresses", "notifications", "support_tickets"}
+        to_truncate = [
+            f'"{t.name}"'
+            for t in reversed(Base.metadata.sorted_tables)
+            if t.name not in keep_tables
+        ]
+        if to_truncate:
+            await db.execute(
+                text(f"TRUNCATE TABLE {', '.join(to_truncate)} RESTART IDENTITY CASCADE")
+            )
+            await db.commit()
 
         cat_map = {}
         for cat_name, name, slug, desc, variants in WOMENS_CATALOG:

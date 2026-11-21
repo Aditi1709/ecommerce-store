@@ -2,29 +2,130 @@ import { Product } from "@/lib/api";
 
 export const MEGA_MENU = [
   {
-    category: "Apparel",
-    subcategories: ["Hoodies", "Tees", "Cargo Pants", "Jackets", "Linen Shirts"],
+    category: "Tops",
+    subcategories: [
+      "Crop Top",
+      "Blouse",
+      "Button-Down Shirt",
+      "Corset Top",
+      "Halterneck Top",
+      "Peplum Top",
+      "Bodysuit",
+      "Camisole",
+      "Wrap Top",
+      "Kaftan Top",
+    ],
   },
   {
-    category: "Footwear",
-    subcategories: ["Sneakers", "Trail Runners", "Chelsea Boots"],
+    category: "Bottoms",
+    subcategories: [
+      "Wide-Leg Jeans",
+      "Palazzo Pants",
+      "Bootcut Jeans",
+      "Mom Jeans",
+      "Cigarette Pants",
+      "Culottes",
+      "Cargo Pants",
+      "Denim Shorts",
+    ],
   },
   {
-    category: "Accessories",
-    subcategories: ["Sunglasses", "Backpacks", "Watches", "Caps"],
+    category: "Skirts",
+    subcategories: [
+      "Midi Skirt",
+      "Mini Skirt",
+      "Maxi Skirt",
+      "Pleated Skirt",
+      "Pencil Skirt",
+      "Denim Skirt",
+      "Wrap Skirt",
+      "Skort",
+    ],
   },
   {
-    category: "Electronics",
-    subcategories: ["Headphones", "Keyboards", "Power Banks"],
+    category: "Dresses & One-Pieces",
+    subcategories: [
+      "Sundress",
+      "Slip Dress",
+      "Bodycon Dress",
+      "Midi Dress",
+      "Maxi Dress",
+      "Shirt Dress",
+      "Cocktail Dress",
+      "Jumpsuit",
+      "Romper",
+      "Dungarees",
+    ],
   },
   {
-    category: "Home & Desk",
-    subcategories: ["Tumblers", "Desk Mats"],
+    category: "Indian & Ethnic Wear",
+    subcategories: [
+      "Anarkali Suit",
+      "Saree",
+      "Lehenga Choli",
+      "Sharara",
+      "Kurti",
+      "Salwar Kameez",
+      "Patiala Salwar",
+      "Dupatta",
+      "Indo-Western",
+    ],
+  },
+  {
+    category: "Outerwear",
+    subcategories: [
+      "Trench Coat",
+      "Cardigan",
+      "Blazer",
+      "Denim Jacket",
+      "Turtleneck Sweater",
+      "Puffer Jacket",
+      "Shrug",
+    ],
+  },
+  {
+    category: "Activewear & Swimwear",
+    subcategories: [
+      "Sports Bra",
+      "Yoga Leggings",
+      "Tennis Skirt",
+      "Tracksuit",
+      "One-Piece Swimsuit",
+      "Bikini",
+      "Sarong",
+    ],
+  },
+  {
+    category: "Innerwear & Sleepwear",
+    subcategories: [
+      "Pajama Set",
+      "Bralette",
+      "T-Shirt Bra",
+      "Loungewear Set",
+      "Kimono Robe",
+      "Babydoll",
+      "Shapewear",
+    ],
   },
 ];
 
-export const TRENDING_SEARCHES = ["Hoodie", "Sneakers", "Headphones", "Backpack", "Watch"];
-export const POPULAR_SEARCHES = ["Apparel", "Electronics", "Keyboard", "Sunglasses", "Boots"];
+export const TRENDING_SEARCHES = [
+  "Crop Top",
+  "Anarkali",
+  "Wide-Leg Jeans",
+  "Satin Midi Skirt",
+  "Sundress",
+  "Lehenga",
+];
+
+export const POPULAR_SEARCHES = [
+  "Tops",
+  "Dresses",
+  "Indian & Ethnic Wear",
+  "Skirts",
+  "Palazzo Pants",
+  "Pajama Set",
+];
 
 function levenshtein(a: string, b: string): number {
   const m = a.length;
@@ -56,7 +157,7 @@ export function getTypoSuggestion(query: string, products: Product[]): string | 
   }
 
   let bestWord: string | null = null;
-  let bestDist = 3; // max 2 typos allowed
+  let bestDist = 3;
 
   for (const word of dictionary) {
     const lower = word.toLowerCase();

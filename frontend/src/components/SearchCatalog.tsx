@@ -63,15 +63,23 @@ function inferMaterial(p: Product): string {
 
 function inferType(p: Product): string {
   const name = p.name.toLowerCase();
-  if (name.includes("hoodie")) return "Hoodies";
-  if (name.includes("tee") || name.includes("shirt")) return "Tops & Shirts";
-  if (name.includes("pant") || name.includes("cargo")) return "Bottoms";
-  if (name.includes("jacket")) return "Outerwear";
-  if (name.includes("sneaker") || name.includes("shoe") || name.includes("boot")) return "Shoes & Boots";
-  if (name.includes("headphone") || name.includes("keyboard") || name.includes("power")) return "Tech Gadgets";
-  if (name.includes("watch") || name.includes("sunglass") || name.includes("cap") || name.includes("backpack"))
-    return "Everyday Carry";
-  return "Lifestyle";
+  if (name.includes("top") || name.includes("blouse") || name.includes("shirt") || name.includes("corset") || name.includes("camisole") || name.includes("bodysuit") || name.includes("kaftan"))
+    return "Tops & Blouses";
+  if (name.includes("jean") || name.includes("palazzo") || name.includes("pant") || name.includes("culotte") || name.includes("short"))
+    return "Jeans & Trousers";
+  if (name.includes("skirt") || name.includes("skort"))
+    return "Skirts & Skorts";
+  if (name.includes("dress") || name.includes("jumpsuit") || name.includes("romper") || name.includes("dungaree"))
+    return "Dresses & Jumpsuits";
+  if (name.includes("saree") || name.includes("anarkali") || name.includes("lehenga") || name.includes("sharara") || name.includes("kurti") || name.includes("ethnic"))
+    return "Indian & Ethnic Wear";
+  if (name.includes("trench") || name.includes("cardigan") || name.includes("blazer") || name.includes("jacket") || name.includes("turtleneck"))
+    return "Coats, Blazers & Knits";
+  if (name.includes("sports") || name.includes("yoga") || name.includes("swimsuit") || name.includes("tracksuit"))
+    return "Activewear & Swimwear";
+  if (name.includes("pajama") || name.includes("bralette") || name.includes("kimono") || name.includes("loungewear"))
+    return "Innerwear & Sleepwear";
+  return "Women's Essentials";
 }
 
 function getAttr(attrs: Record<string, string> | undefined, key: string): string | undefined {
