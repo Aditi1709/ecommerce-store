@@ -3,6 +3,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.core.database import engine
+from seed_womens import reseed_womens
 from app.models.product import Base
 from app.models import (
     address,
@@ -30,6 +31,7 @@ from app.api.v1 import (
 async def lifespan(app: FastAPI):
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
+    await reseed_womens(force=False)
     yield
 
 
