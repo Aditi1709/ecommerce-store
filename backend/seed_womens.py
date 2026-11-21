@@ -1,3 +1,4 @@
+from app.models.product import Base
 import asyncio
 from sqlalchemy import select, text
 from app.core.database import AsyncSessionLocal
