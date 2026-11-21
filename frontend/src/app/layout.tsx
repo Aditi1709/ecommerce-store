@@ -32,11 +32,20 @@ export const metadata: Metadata = {
     url: "https://ecommerce-store-bay-five.vercel.app",
     siteName: "Zenoo",
     type: "website",
+    images: [
+      {
+        url: "/og-logo.png",
+        width: 1200,
+        height: 630,
+        alt: "Zenoo Logo",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "Zenoo",
     description: "Everyday Apparel, Footwear & Minimal Gear",
+    images: ["/og-logo.png"],
   },
 };
 
