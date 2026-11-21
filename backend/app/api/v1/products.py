@@ -46,3 +46,9 @@ async def get_product(slug: str, db: AsyncSession = Depends(get_db)):
     if not product:
         raise HTTPException(status_code=404, detail="Product not found")
     return product
+
+@router.post("/sync-womens")
+async def sync_womens_catalog():
+    from seed_womens import reseed_womens
+    await reseed_womens(force=True)
+    return {"status": "ok", "message": "Synced Women's & Girls' Wear catalog"}
