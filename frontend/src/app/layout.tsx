@@ -20,8 +20,24 @@ const outfit = Outfit({
 });
 
 export const metadata: Metadata = {
-  title: "Zenoo",
-  description: "Thoughtfully designed essentials from independent merchants.",
+  metadataBase: new URL("https://ecommerce-store-bay-five.vercel.app"),
+  title: {
+    default: "Zenoo",
+    template: "%s | Zenoo",
+  },
+  description: "Everyday Apparel, Footwear & Minimal Gear",
+  openGraph: {
+    title: "Zenoo",
+    description: "Everyday Apparel, Footwear & Minimal Gear",
+    url: "https://ecommerce-store-bay-five.vercel.app",
+    siteName: "Zenoo",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Zenoo",
+    description: "Everyday Apparel, Footwear & Minimal Gear",
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
