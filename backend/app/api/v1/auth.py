@@ -51,3 +51,50 @@ async def login(payload: UserLogin, db: AsyncSession = Depends(get_db)):
 @router.get("/me", response_model=UserOut)
 async def me(user: User = Depends(get_current_user)):
     return user
+import json
+import os
+import secrets
+import urllib.parse
+import urllib.request
+from pydantic import BaseModel
+
+
+class GoogleAuthPayload(BaseModel):
+    credential: str
+
+
+@router.post("/google", response_model=AuthResponse)
+async def google_auth(payload: GoogleAuthPayload, db: AsyncSession = Depends(get_db)):
+    url = f"https://oauth2.googleapis.com/tokeninfo?id_token={urllib.parse.quote(payload.credential)}"
+    try:
+        with urllib.request.urlopen(url, timeout=10) as resp:
+            token_info = json.loads(resp.read().decode("utf-8"))
+    except Exception:
+        raise HTTPException(status_code=401, detail="Invalid Google token")
+
+    expected_client_id = os.getenv("GOOGLE_CLIENT_ID") or os.getenv("NEXT_PUBLIC_GOOGLE_CLIENT_ID")
+    if expected_client_id and token_info.get("aud") != expected_client_id:
+        raise HTTPException(status_code=401, detail="Google token audience mismatch")
+
+    email = token_info.get("email")
+    email_verified = str(token_info.get("email_verified", "")).lower() == "true"
+    if not email or not email_verified:
+        raise HTTPException(status_code=401, detail="Google email not verified")
+
+    user = (await db.execute(select(User).where(User.email == email))).scalar_one_or_none()
+    if not user:
+        any_user = (await db.execute(select(User).limit(1))).scalar_one_or_none()
+        role = "owner" if not any_user else "user"
+        name = token_info.get("name") or email.split("@")[0]
+        user = User(
+            name=name,
+            email=email,
+            password_hash=hash_password(secrets.token_urlsafe(32)),
+            role=role,
+        )
+        db.add(user)
+        await db.commit()
+        await db.refresh(user)
+
+    token = create_access_token(str(user.id), user.role)
+    return AuthResponse(access_token=token, user=user)
