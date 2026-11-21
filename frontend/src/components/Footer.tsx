@@ -15,53 +15,58 @@ export default function Footer() {
   };
 
   return (
-    <footer className="bg-black text-white mt-20">
-      <div className="max-w-6xl mx-auto px-6 py-14 grid grid-cols-1 md:grid-cols-4 gap-10">
+    <footer className="bg-[#F6E4E2] text-[#231819] border-t border-[#EAD2CF] mt-16 rounded-b-[28px] sm:rounded-b-[36px]">
+      <div className="max-w-6xl mx-auto px-6 sm:px-8 py-14 grid grid-cols-1 md:grid-cols-4 gap-10">
         <div>
-          <h3 className="text-xl font-bold mb-3">Zeno</h3>
-          <p className="text-sm text-gray-400">
-            Multi-vendor marketplace for curated apparel, gear, and everyday essentials.
+          <div className="flex items-center gap-2.5 mb-3">
+            <span className="w-8 h-8 rounded-full bg-[#C81E1E] text-white flex items-center justify-center font-editorial font-bold text-base">
+              Z
+            </span>
+            <h3 className="text-lg font-bold tracking-[0.12em] text-[#231819]">ZENOO</h3>
+          </div>
+          <p className="text-sm text-[#6E5A5C] leading-relaxed">
+            Curated apparel, modern objects, and everyday essentials from independent creators.
           </p>
-          <div className="flex gap-4 mt-4 text-sm text-gray-300">
-            <a href="https://instagram.com" target="_blank" rel="noreferrer" className="hover:text-white">
+          <div className="flex gap-4 mt-4 text-xs font-semibold text-[#C81E1E]">
+            <a href="https://instagram.com" target="_blank" rel="noreferrer" className="hover:underline">
               Instagram
             </a>
-            <a href="https://x.com" target="_blank" rel="noreferrer" className="hover:text-white">
+            <a href="https://x.com" target="_blank" rel="noreferrer" className="hover:underline">
               X
             </a>
-            <a href="https://youtube.com" target="_blank" rel="noreferrer" className="hover:text-white">
+            <a href="https://youtube.com" target="_blank" rel="noreferrer" className="hover:underline">
               YouTube
             </a>
           </div>
         </div>
 
         <div>
-          <h4 className="font-semibold mb-3">Shop</h4>
-          <ul className="space-y-2 text-sm text-gray-400">
-            <li><Link href="/#new-arrivals" className="hover:text-white">New Arrivals</Link></li>
-            <li><Link href="/#flash-sales" className="hover:text-white">Flash Sales</Link></li>
-            <li><Link href="/#bestsellers" className="hover:text-white">Bestsellers</Link></li>
-            <li><Link href="/#collections" className="hover:text-white">Seasonal Collections</Link></li>
+          <h4 className="font-editorial font-bold text-base text-[#C81E1E] mb-3">Shop</h4>
+          <ul className="space-y-2 text-sm text-[#5C494B]">
+            <li><Link href="/#new-arrivals" className="hover:text-[#C81E1E]">New Favorites</Link></li>
+            <li><Link href="/#flash-sales" className="hover:text-[#C81E1E]">Flash Drops</Link></li>
+            <li><Link href="/#bestsellers" className="hover:text-[#C81E1E]">Most Loved</Link></li>
+            <li><Link href="/#collections" className="hover:text-[#C81E1E]">Stories</Link></li>
           </ul>
         </div>
 
         <div>
-          <h4 className="font-semibold mb-3">Account</h4>
-          <ul className="space-y-2 text-sm text-gray-400">
-            <li><Link href="/cart" className="hover:text-white">Your Cart</Link></li>
-            <li><Link href="/login" className="hover:text-white">Login</Link></li>
-            <li><Link href="/register" className="hover:text-white">Become a Merchant</Link></li>
-            <li><Link href="/merchant" className="hover:text-white">Merchant Portal</Link></li>
+          <h4 className="font-editorial font-bold text-base text-[#C81E1E] mb-3">Account</h4>
+          <ul className="space-y-2 text-sm text-[#5C494B]">
+            <li><Link href="/cart" className="hover:text-[#C81E1E]">Your Bag</Link></li>
+            <li><Link href="/wishlist" className="hover:text-[#C81E1E]">Wishlist</Link></li>
+            <li><Link href="/login" className="hover:text-[#C81E1E]">Sign In</Link></li>
+            <li><Link href="/merchant" className="hover:text-[#C81E1E]">Merchant Portal</Link></li>
           </ul>
         </div>
 
         <div>
-          <h4 className="font-semibold mb-3">Newsletter</h4>
-          <p className="text-sm text-gray-400 mb-3">
-            Get early access to flash sales and exclusive drops.
+          <h4 className="font-editorial font-bold text-base text-[#C81E1E] mb-3">Newsletter</h4>
+          <p className="text-sm text-[#5C494B] mb-3">
+            Early access to limited drops and studio notes.
           </p>
           {subscribed ? (
-            <p className="text-sm text-green-400 font-medium">Thanks for subscribing!</p>
+            <p className="text-sm text-[#C81E1E] font-semibold">✦ Thanks for joining Zenoo!</p>
           ) : (
             <form onSubmit={handleSubscribe} className="flex gap-2">
               <input
@@ -70,9 +75,9 @@ export default function Footer() {
                 placeholder="you@example.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full px-3 py-2 rounded-lg bg-gray-900 border border-gray-700 text-sm text-white"
+                className="w-full px-3.5 py-2 rounded-full bg-[#FFFDFB] border border-[#E2C6C2] text-sm text-[#231819]"
               />
-              <button className="px-4 py-2 bg-white text-black rounded-lg text-sm font-medium hover:bg-gray-200">
+              <button className="px-4 py-2 bg-[#C81E1E] text-white rounded-full text-xs font-semibold hover:bg-[#A81818] transition shrink-0">
                 Join
               </button>
             </form>
@@ -80,8 +85,8 @@ export default function Footer() {
         </div>
       </div>
 
-      <div className="border-t border-gray-800 py-5 text-center text-xs text-gray-500">
-        © 2026 Zeno. All rights reserved.
+      <div className="border-t border-[#EAD2CF] py-5 text-center text-xs text-[#7D6668]">
+        © 2026 Zenoo. Crafted for everyday living.
       </div>
     </footer>
   );

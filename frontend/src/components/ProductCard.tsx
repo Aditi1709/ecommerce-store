@@ -7,17 +7,27 @@ import { useCart } from "@/context/CartContext";
 
 interface ProductCardProps {
   product: Product;
+  tintIndex?: number;
 }
 
-export default function ProductCard({ product }: ProductCardProps) {
+const PASTEL_TINTS = [
+  "bg-[#FAD5DC]",
+  "bg-[#D2E4F6]",
+  "bg-[#F4DDD6]",
+  "bg-[#EFE8DF]",
+];
+
+export default function ProductCard({ product, tintIndex = 0 }: ProductCardProps) {
   const { addItem } = useCart();
   const [added, setAdded] = useState(false);
+  const [liked, setLiked] = useState(false);
 
   const primaryVariant = product.variants[0];
   const inStock = primaryVariant ? primaryVariant.stock_qty > 0 : false;
   const variantLabel = primaryVariant
     ? Object.values(primaryVariant.attributes || {}).join(" / ") || primaryVariant.sku
     : "";
+  const tintClass = PASTEL_TINTS[tintIndex % PASTEL_TINTS.length];
 
   const handleQuickAdd = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -34,66 +44,80 @@ export default function ProductCard({ product }: ProductCardProps) {
       imageUrl: primaryVariant.image_url,
     });
     setAdded(true);
-    setTimeout(() => setAdded(false), 1600);
+    setTimeout(() => setAdded(false), 1400);
   };
 
   return (
-    <div className="group flex flex-col">
+    <div className="group flex flex-col bg-[#FFFDFB] rounded-2xl p-3 border border-[#EFE0DD] shadow-[0_6px_20px_rgba(140,45,55,0.05)] hover:shadow-[0_12px_28px_rgba(200,30,30,0.12)] transition-all">
       <Link
         href={`/products/${product.slug}`}
-        className="relative aspect-[4/5] w-full overflow-hidden rounded-2xl bg-[#F2EFE9] border border-[#E7E2D8] shadow-sm group-hover:shadow-md transition-shadow"
+        className={`relative aspect-square w-full overflow-hidden rounded-xl ${tintClass}`}
       >
         <img
-          src={primaryVariant?.image_url || "https://placehold.co/600x750/EBF3EF/0F3D2E?text=Zeno"}
+          src={primaryVariant?.image_url || "https://placehold.co/600x600/FAD5DC/C81E1E?text=Zenoo"}
           alt={product.name}
           className="h-full w-full object-cover object-center transition-transform duration-500 ease-out group-hover:scale-105"
         />
 
-        <div className="absolute top-3 left-3 flex flex-wrap gap-1.5">
-          {product.category?.name && (
-            <span className="px-2.5 py-1 rounded-full bg-[#EBF3EF]/95 text-[#0F3D2E] text-[11px] font-semibold">
-              {product.category.name}
-            </span>
-          )}
-          {!inStock && (
-            <span className="px-2.5 py-1 rounded-full bg-rose-600 text-white text-[11px] font-semibold">
-              Sold Out
-            </span>
-          )}
-        </div>
+        {/* Top-Right Heart Button */}
+        <button
+          type="button"
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            setLiked((v) => !v);
+          }}
+          aria-label="Save to wishlist"
+          className="absolute top-2.5 right-2.5 w-7 h-7 rounded-full bg-white/85 backdrop-blur-sm flex items-center justify-center text-[#231819] hover:text-[#C81E1E] transition shadow-xs"
+        >
+          <svg
+            className="w-4 h-4"
+            fill={liked ? "#C81E1E" : "none"}
+            stroke={liked ? "#C81E1E" : "currentColor"}
+            strokeWidth="1.8"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M12 20.5s-7.5-4.7-9.3-9.1C1.3 8 3.6 4.8 7 4.8c2 0 3.7 1.1 5 2.7 1.3-1.6 3-2.7 5-2.7 3.4 0 5.7 3.2 4.3 6.6-1.8 4.4-9.3 9.1-9.3 9.1Z"
+            />
+          </svg>
+        </button>
 
-        {inStock && (
-          <div className="absolute inset-x-3 bottom-3 translate-y-2 opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
-            <button
-              onClick={handleQuickAdd}
-              className={`w-full py-2.5 rounded-xl text-white text-xs font-semibold tracking-wide transition shadow-lg ${
-                added
-                  ? "bg-emerald-600"
-                  : "bg-[#D95D39] hover:bg-[#C24B29]"
-              }`}
-            >
-              {added ? "Added to Bag ✓" : "+ Quick Add"}
-            </button>
-          </div>
+        {!inStock && (
+          <span className="absolute top-2.5 left-2.5 px-2.5 py-0.5 rounded-full bg-[#C81E1E] text-white text-[10px] font-semibold">
+            Sold Out
+          </span>
         )}
       </Link>
 
-      <div className="pt-3.5 px-0.5 flex items-start justify-between gap-3">
+      {/* Bottom Title, Price & Circular Crimson '+' Button */}
+      <div className="pt-3 px-1 flex items-center justify-between gap-2">
         <div className="min-w-0">
           <Link
             href={`/products/${product.slug}`}
-            className="block font-semibold text-[15px] text-[#18181B] group-hover:text-[#0F3D2E] transition truncate"
+            className="block font-semibold text-sm text-[#231819] group-hover:text-[#C81E1E] transition truncate"
           >
             {product.name}
           </Link>
-          {variantLabel && (
-            <p className="text-xs text-zinc-500 mt-0.5 truncate">{variantLabel}</p>
-          )}
+          <p className="text-xs font-bold text-[#C81E1E] mt-0.5">
+            {primaryVariant ? formatPrice(primaryVariant.price_minor) : "Out of stock"}
+          </p>
         </div>
 
-        <p className="text-[15px] font-bold text-[#0F3D2E] shrink-0">
-          {primaryVariant ? formatPrice(primaryVariant.price_minor) : ""}
-        </p>
+        {inStock && (
+          <button
+            type="button"
+            onClick={handleQuickAdd}
+            title={added ? "Added!" : "Quick Add"}
+            className={`w-7 h-7 rounded-full flex items-center justify-center text-white text-sm font-bold shrink-0 transition shadow-sm ${
+              added ? "bg-emerald-600 scale-110" : "bg-[#C81E1E] hover:bg-[#A81818]"
+            }`}
+          >
+            {added ? "✓" : "+"}
+          </button>
+        )}
       </div>
     </div>
   );

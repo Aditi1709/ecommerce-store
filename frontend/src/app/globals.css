@@ -1,9 +1,15 @@
 @import "tailwindcss";
 
 :root {
-  --bg-canvas: #faf8f5;
-  --brand-emerald: #0f3d2e;
-  --brand-terracotta: #d95d39;
+  --bg-frame: #f8bac4;
+  --bg-canvas: #faf3eb;
+  --bg-blush: #fad2d8;
+  --bg-blush-soft: #fdf6f5;
+  --brand-crimson: #c81e1e;
+  --brand-crimson-hover: #a81818;
+  --ink-primary: #231819;
+  --ink-muted: #6e5a5c;
+  --border-warm: #ead9d6;
 }
 
 html {
@@ -11,12 +17,65 @@ html {
 }
 
 body {
-  background-color: var(--bg-canvas);
-  color: #18181b;
+  background-color: var(--bg-frame);
+  color: var(--ink-primary);
   font-family: var(--font-sans), -apple-system, BlinkMacSystemFont, sans-serif;
   -webkit-font-smoothing: antialiased;
 }
 
-.font-display {
-  font-family: var(--font-display), var(--font-sans), sans-serif;
+.font-editorial {
+  font-family: var(--font-serif), Georgia, serif;
+}
+
+/* Harmonize inner pages (login, cart, checkout, product, merchant, admin) with the warm blush-cream & crimson palette */
+.zenoo-shell h1,
+.zenoo-shell h2 {
+  font-family: var(--font-serif), Georgia, serif;
+  color: #c81e1e;
+  letter-spacing: -0.02em;
+}
+
+.zenoo-shell .bg-black,
+.zenoo-shell .bg-gray-900,
+.zenoo-shell .bg-gray-950 {
+  background-color: #c81e1e !important;
+  color: #fffaf7 !important;
+}
+
+.zenoo-shell .hover\:bg-gray-800:hover,
+.zenoo-shell .hover\:bg-gray-900:hover {
+  background-color: #a81818 !important;
+}
+
+.zenoo-shell .bg-gray-50,
+.zenoo-shell .bg-gray-100 {
+  background-color: #f6ebe3 !important;
+}
+
+.zenoo-shell .border,
+.zenoo-shell .border-gray-200,
+.zenoo-shell .border-gray-300 {
+  border-color: #ead9d6 !important;
+}
+
+.zenoo-shell .hover\:border-black:hover,
+.zenoo-shell .focus\:border-black:focus,
+.zenoo-shell .focus-within\:border-black:focus-within {
+  border-color: #c81e1e !important;
+}
+
+.zenoo-shell input,
+.zenoo-shell select,
+.zenoo-shell textarea {
+  background-color: #fffdfb;
+  border-color: #e4cfc9;
+  color: #231819;
+}
+
+.zenoo-shell input:focus,
+.zenoo-shell select:focus,
+.zenoo-shell textarea:focus {
+  outline: none;
+  border-color: #c81e1e;
+  box-shadow: 0 0 0 3px rgba(200, 30, 30, 0.12);
 }

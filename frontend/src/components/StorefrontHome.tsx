@@ -13,35 +13,118 @@ const subscribeStorage = (cb: () => void) => {
 const getRecentlyViewedSnapshot = () => localStorage.getItem("recently_viewed") ?? EMPTY_LIST;
 const getServerSnapshot = () => EMPTY_LIST;
 
-function ProductCard({ product, badge }: { product: Product; badge?: string }) {
+const CARD_TINTS = [
+  "bg-[#FAD5DC]",
+  "bg-[#CFE2F7]",
+  "bg-[#F6D7DF]",
+  "bg-[#EFE7DD]",
+];
+
+function EditorialCard({
+  product,
+  index = 0,
+  badge,
+}: {
+  product: Product;
+  index?: number;
+  badge?: string;
+}) {
+  const { addItem } = useCart();
+  const [added, setAdded] = useState(false);
+  const [liked, setLiked] = useState(false);
+
   const firstVariant = product.variants[0];
+  const inStock = firstVariant ? firstVariant.stock_qty > 0 : false;
+  const tint = CARD_TINTS[index % CARD_TINTS.length];
+
+  const handleQuickAdd = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (!firstVariant || !inStock) return;
+    addItem({
+      variantId: firstVariant.id,
+      productName: product.name,
+      slug: product.slug,
+      sku: firstVariant.sku,
+      label: Object.values(firstVariant.attributes || {}).join(" / ") || firstVariant.sku,
+      priceMinor: firstVariant.price_minor,
+      imageUrl: firstVariant.image_url,
+    });
+    setAdded(true);
+    setTimeout(() => setAdded(false), 1400);
+  };
+
   return (
-    <Link
-      href={`/products/${product.slug}`}
-      className="group border rounded-xl overflow-hidden hover:shadow-md transition bg-white flex flex-col"
-    >
-      <div className="relative aspect-square bg-gray-100 overflow-hidden">
+    <div className="group bg-[#FFFDFB] rounded-2xl p-3 border border-[#EFE0DD] shadow-[0_6px_20px_rgba(140,45,55,0.05)] hover:shadow-[0_14px_30px_rgba(200,30,30,0.12)] transition-all flex flex-col">
+      <Link
+        href={`/products/${product.slug}`}
+        className={`relative aspect-square rounded-xl overflow-hidden ${tint}`}
+      >
         <img
-          src={firstVariant?.image_url || "https://placehold.co/600x600"}
+          src={firstVariant?.image_url || "https://placehold.co/600x600/FAD5DC/C81E1E?text=Zenoo"}
           alt={product.name}
-          className="w-full h-full object-cover group-hover:scale-105 transition duration-300"
+          className="w-full h-full object-cover group-hover:scale-105 transition duration-500"
         />
+
         {badge && (
-          <span className="absolute top-3 left-3 bg-black text-white text-xs px-2.5 py-1 rounded-full font-medium">
+          <span className="absolute top-2.5 left-2.5 bg-[#C81E1E] text-white text-[10px] px-2.5 py-0.5 rounded-full font-semibold tracking-wide">
             {badge}
           </span>
         )}
-      </div>
-      <div className="p-4 flex-1 flex flex-col justify-between">
-        <div>
-          <p className="text-xs text-gray-500 uppercase">{product.category.name}</p>
-          <h3 className="font-semibold mt-1 line-clamp-1">{product.name}</h3>
+
+        <button
+          type="button"
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            setLiked((v) => !v);
+          }}
+          aria-label="Favorite"
+          className="absolute top-2.5 right-2.5 w-7 h-7 rounded-full bg-white/85 backdrop-blur-sm flex items-center justify-center text-[#231819] hover:text-[#C81E1E] transition"
+        >
+          <svg
+            className="w-4 h-4"
+            fill={liked ? "#C81E1E" : "none"}
+            stroke={liked ? "#C81E1E" : "currentColor"}
+            strokeWidth="1.8"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M12 20.5s-7.5-4.7-9.3-9.1C1.3 8 3.6 4.8 7 4.8c2 0 3.7 1.1 5 2.7 1.3-1.6 3-2.7 5-2.7 3.4 0 5.7 3.2 4.3 6.6-1.8 4.4-9.3 9.1-9.3 9.1Z"
+            />
+          </svg>
+        </button>
+      </Link>
+
+      <div className="pt-3 px-1 flex items-center justify-between gap-2">
+        <div className="min-w-0">
+          <Link
+            href={`/products/${product.slug}`}
+            className="block font-semibold text-sm text-[#231819] group-hover:text-[#C81E1E] transition truncate"
+          >
+            {product.name}
+          </Link>
+          <p className="text-xs font-bold text-[#C81E1E] mt-0.5">
+            {firstVariant ? formatPrice(firstVariant.price_minor) : "Out of stock"}
+          </p>
         </div>
-        <p className="font-bold mt-2">
-          {firstVariant ? formatPrice(firstVariant.price_minor) : "Out of stock"}
-        </p>
+
+        {inStock && (
+          <button
+            type="button"
+            onClick={handleQuickAdd}
+            title={added ? "Added to Bag" : "Quick Add"}
+            className={`w-7 h-7 rounded-full flex items-center justify-center text-white text-sm font-bold shrink-0 transition shadow-sm ${
+              added ? "bg-emerald-600 scale-110" : "bg-[#C81E1E] hover:bg-[#A81818]"
+            }`}
+          >
+            {added ? "✓" : "+"}
+          </button>
+        )}
       </div>
-    </Link>
+    </div>
   );
 }
 
@@ -97,107 +180,151 @@ export default function StorefrontHome({ products }: { products: Product[] }) {
     }, 50);
   };
 
+  const heroProduct = products[0];
+  const secondaryStoryProduct = products[1] || products[0];
   const featured = products.slice(0, 4);
   const bestsellers = [...products].reverse().slice(0, 4);
   const newArrivals = products.slice(0, 4);
-  const trending = products.slice(0, 4);
-  const recommended = [...products].reverse().slice(0, 4);
   const deals = products.slice(0, 4);
 
   return (
-    <main className="max-w-6xl mx-auto px-6 py-8 space-y-16">
-      {/* Hero Banner with Promotional Offer */}
-      <section className="rounded-2xl bg-gray-950 text-white p-10 md:p-16 flex flex-col md:flex-row items-center justify-between gap-8">
-        <div className="max-w-xl space-y-4">
-          <span className="inline-block text-xs uppercase tracking-widest bg-white/15 px-3 py-1 rounded-full">
-            Season Launch • Up to 40% Off
+    <main className="max-w-6xl mx-auto px-5 sm:px-8 py-7 space-y-14">
+      {/* Split Editorial Hero (MODOA-inspired) */}
+      <section className="grid grid-cols-1 md:grid-cols-2 gap-5">
+        {/* Left Blush-Pink Editorial Card */}
+        <div className="relative rounded-[26px] bg-[#FAD2D8] p-8 sm:p-11 flex flex-col justify-between min-h-[340px] sm:min-h-[390px] overflow-hidden border border-[#F3BFC8]">
+          {/* Top-right 4-point crimson sparkle */}
+          <span
+            aria-hidden="true"
+            className="absolute top-7 right-8 text-[#C81E1E] text-3xl leading-none select-none"
+          >
+            ✦
           </span>
-          <h1 className="text-4xl md:text-5xl font-bold leading-tight">
-            Everyday Essentials, Direct from Independent Merchants.
-          </h1>
-          <p className="text-gray-300">
-            Discover curated apparel, accessories, and gear with instant UPI checkout and free shipping over ₹999.
-          </p>
-          <div className="flex flex-wrap gap-3 pt-2">
+
+          <div className="space-y-4 max-w-sm pt-2">
+            <h1 className="font-editorial text-4xl sm:text-[54px] font-bold text-[#C81E1E] leading-[1.03] tracking-tight">
+              Shape
+              <br />
+              Your Style
+            </h1>
+            <p className="text-sm sm:text-[15px] text-[#3B2527] leading-relaxed">
+              Curated pieces for modern everyday living, direct from independent creators.
+            </p>
+          </div>
+
+          <div className="flex items-end justify-between pt-8">
             <a
-              href="#featured"
-              className="px-6 py-3 bg-white text-black rounded-lg font-medium hover:bg-gray-200 transition"
+              href="#new-arrivals"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[#C81E1E] text-white text-xs sm:text-sm font-semibold hover:bg-[#A81818] transition shadow-md"
             >
-              Shop Now
+              Explore Collection <span>→</span>
             </a>
-            <Link
-              href="/register"
-              className="px-6 py-3 border border-white/30 rounded-lg font-medium hover:bg-white/10 transition"
-            >
-              Sell as a Merchant
-            </Link>
+
+            {/* Decorative 3x3 crimson dot matrix */}
+            <div className="grid grid-cols-3 gap-1.5 opacity-70" aria-hidden="true">
+              {Array.from({ length: 9 }).map((_, idx) => (
+                <span key={idx} className="w-1.5 h-1.5 rounded-full bg-[#C81E1E]" />
+              ))}
+            </div>
           </div>
         </div>
+
+        {/* Right Showcase Visual Card */}
+        <Link
+          href={heroProduct ? `/products/${heroProduct.slug}` : "/search"}
+          className="group relative rounded-[26px] bg-[#F2D5C8] overflow-hidden min-h-[340px] sm:min-h-[390px] border border-[#EBC5B6] flex items-center justify-center"
+        >
+          {heroProduct?.variants[0]?.image_url ? (
+            <img
+              src={heroProduct.variants[0].image_url}
+              alt={heroProduct.name}
+              className="w-full h-full object-cover group-hover:scale-105 transition duration-700"
+            />
+          ) : (
+            <div className="text-center p-8">
+              <p className="font-editorial text-3xl text-[#C81E1E] font-bold">Zenoo Studio</p>
+              <p className="text-xs text-[#6E5A5C] mt-1">Season 2026 Capsule</p>
+            </div>
+          )}
+
+          {heroProduct && (
+            <div className="absolute bottom-4 left-4 right-4 bg-[#FAF3EB]/92 backdrop-blur-md rounded-2xl px-4 py-3 flex items-center justify-between border border-[#EAD9D6]">
+              <div>
+                <p className="text-[10px] uppercase tracking-widest text-[#9B7E80] font-semibold">
+                  Featured Drop
+                </p>
+                <p className="text-sm font-bold text-[#231819]">{heroProduct.name}</p>
+              </div>
+              <span className="px-3.5 py-1.5 rounded-full bg-[#C81E1E] text-white text-xs font-bold">
+                {heroProduct.variants[0] ? formatPrice(heroProduct.variants[0].price_minor) : "Shop"}
+              </span>
+            </div>
+          )}
+        </Link>
       </section>
 
-      {/* Search Bar & Category Navigation */}
+      {/* Filter Pills + Quick Search */}
       <section className="space-y-4">
-        <form onSubmit={handleSearchSubmit} className="flex flex-col sm:flex-row gap-3">
-          <input
-            type="text"
-            placeholder="Search products, hoodies, gear..."
-            value={searchInput}
-            onChange={(e) => {
-              setSearchInput(e.target.value);
-              setSearch(e.target.value);
-            }}
-            className="flex-1 border rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-black"
-          />
-          <button
-            type="submit"
-            className="px-6 py-3 bg-black text-white rounded-xl text-sm font-medium hover:bg-gray-800 transition"
-          >
-            Search
-          </button>
-          {isFiltering && (
-            <button
-              type="button"
-              onClick={() => {
-                setSearchInput("");
-                setSearch("");
-                setSelectedCategory("All");
-              }}
-              className="px-4 py-3 border rounded-xl text-sm hover:bg-gray-100"
-            >
-              Clear
-            </button>
-          )}
-        </form>
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
+          <div className="flex flex-wrap gap-2">
+            {categories.map((cat) => (
+              <button
+                key={cat}
+                onClick={() => setSelectedCategory(cat)}
+                className={`px-4 py-2 rounded-full text-xs sm:text-sm font-medium border transition ${
+                  selectedCategory === cat
+                    ? "bg-[#C81E1E] text-white border-[#C81E1E] shadow-xs"
+                    : "bg-[#FFFDFB] text-[#231819] border-[#E4CFC9] hover:border-[#C81E1E] hover:text-[#C81E1E]"
+                }`}
+              >
+                {cat}
+              </button>
+            ))}
+          </div>
 
-        <div className="flex flex-wrap gap-2">
-          {categories.map((cat) => (
-            <button
-              key={cat}
-              onClick={() => setSelectedCategory(cat)}
-              className={`px-4 py-2 rounded-full text-sm font-medium border transition ${
-                selectedCategory === cat
-                  ? "bg-black text-white border-black"
-                  : "bg-white text-black hover:border-black"
-              }`}
-            >
-              {cat}
-            </button>
-          ))}
+          <form onSubmit={handleSearchSubmit} className="flex items-center gap-2">
+            <input
+              type="text"
+              placeholder="Filter products..."
+              value={searchInput}
+              onChange={(e) => {
+                setSearchInput(e.target.value);
+                setSearch(e.target.value);
+              }}
+              className="border border-[#E4CFC9] bg-[#FFFDFB] rounded-full px-4 py-2 text-xs sm:text-sm w-full sm:w-56"
+            />
+            {isFiltering && (
+              <button
+                type="button"
+                onClick={() => {
+                  setSearchInput("");
+                  setSearch("");
+                  setSelectedCategory("All");
+                }}
+                className="px-3.5 py-2 rounded-full border border-[#E4CFC9] text-xs hover:bg-[#FAD2D8]/40"
+              >
+                Reset
+              </button>
+            )}
+          </form>
         </div>
       </section>
 
       {/* Search / Category Filter Results */}
       {isFiltering && (
-        <section ref={resultsRef}>
-          <h2 className="text-2xl font-bold mb-6">
-            Results ({filteredProducts.length})
-          </h2>
+        <section ref={resultsRef} className="space-y-5">
+          <div className="flex items-center gap-2">
+            <span className="text-[#C81E1E] text-xl">✦</span>
+            <h2 className="font-editorial text-2xl sm:text-3xl font-bold text-[#C81E1E]">
+              Filtered Pieces ({filteredProducts.length})
+            </h2>
+          </div>
           {filteredProducts.length === 0 ? (
-            <p className="text-gray-500">No products match your search.</p>
+            <p className="text-sm text-[#6E5A5C]">No products match your filter.</p>
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
-              {filteredProducts.map((p) => (
-                <ProductCard key={p.id} product={p} />
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-5">
+              {filteredProducts.map((p, idx) => (
+                <EditorialCard key={p.id} product={p} index={idx} />
               ))}
             </div>
           )}
@@ -206,28 +333,30 @@ export default function StorefrontHome({ products }: { products: Product[] }) {
 
       {/* Continue Shopping (Active Cart Items) */}
       {cartItems.length > 0 && (
-        <section className="border rounded-2xl p-6 bg-gray-50">
+        <section className="border border-[#F1C5CC] rounded-[24px] p-5 sm:p-6 bg-[#FAD2D8]/35">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-xl font-bold">Continue Shopping</h2>
-            <Link href="/cart" className="text-sm font-medium underline">
-              Go to Cart ({cartItems.length})
+            <h2 className="font-editorial text-xl font-bold text-[#C81E1E]">
+              ✦ In Your Bag
+            </h2>
+            <Link href="/cart" className="text-xs font-semibold text-[#C81E1E] underline">
+              Open Bag ({cartItems.length}) →
             </Link>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3">
             {cartItems.slice(0, 4).map((item) => (
               <Link
                 key={item.variantId}
                 href={`/products/${item.slug}`}
-                className="flex items-center gap-3 bg-white border rounded-xl p-3 hover:border-black transition"
+                className="flex items-center gap-3 bg-[#FFFDFB] border border-[#EAD9D6] rounded-2xl p-2.5 hover:border-[#C81E1E] transition"
               >
                 <img
                   src={item.imageUrl || "https://placehold.co/100x100"}
                   alt={item.productName}
-                  className="w-14 h-14 object-cover rounded-lg"
+                  className="w-12 h-12 object-cover rounded-xl"
                 />
                 <div className="min-w-0">
-                  <p className="text-sm font-semibold truncate">{item.productName}</p>
-                  <p className="text-xs text-gray-500">Qty: {item.quantity}</p>
+                  <p className="text-xs font-semibold truncate text-[#231819]">{item.productName}</p>
+                  <p className="text-[11px] text-[#7D6668]">Qty: {item.quantity}</p>
                 </div>
               </Link>
             ))}
@@ -235,149 +364,162 @@ export default function StorefrontHome({ products }: { products: Product[] }) {
         </section>
       )}
 
-      {/* Flash Sales & Today's Deals */}
-      <section id="flash-sales" className="space-y-6">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-          <div>
-            <h2 className="text-2xl font-bold">⚡ Flash Sales & Today&apos;s Deals</h2>
-            <p className="text-sm text-gray-500">Limited-time drops before stock runs out.</p>
+      {/* ✦ New Favorites (MODOA Signature 4-Card Row with Crimson Progress Divider) */}
+      <section id="new-arrivals" className="space-y-5">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2.5">
+            <span className="text-[#C81E1E] text-xl">✦</span>
+            <h2 className="font-editorial text-2xl sm:text-3xl font-bold text-[#C81E1E]">
+              New Favorites
+            </h2>
           </div>
-          <div className="font-mono text-sm bg-red-600 text-white px-4 py-2 rounded-lg w-fit">
+          <Link
+            href="/search"
+            className="text-xs font-semibold text-[#C81E1E] border border-[#E4CFC9] bg-[#FFFDFB] px-3.5 py-1.5 rounded-full hover:bg-[#FAD2D8]/40 transition"
+          >
+            View All →
+          </Link>
+        </div>
+
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-5">
+          {newArrivals.map((p, idx) => (
+            <EditorialCard key={`new-${p.id}`} product={p} index={idx} />
+          ))}
+        </div>
+
+        {/* Signature Crimson Progress Bar Divider */}
+        <div className="pt-2">
+          <div className="h-[2px] w-full bg-[#EAD9D6] rounded-full overflow-hidden">
+            <div className="h-full w-1/4 bg-[#C81E1E] rounded-full" />
+          </div>
+        </div>
+      </section>
+
+      {/* "Made for Everyday ✦" Editorial Split Section (MODOA-inspired) */}
+      <section id="collections" className="grid grid-cols-1 md:grid-cols-12 gap-6 items-center py-2">
+        <div className="md:col-span-6 rounded-[26px] overflow-hidden bg-[#F1D4C6] border border-[#EAD9D6] aspect-[4/3]">
+          <img
+            src={
+              secondaryStoryProduct?.variants[0]?.image_url ||
+              heroProduct?.variants[0]?.image_url ||
+              "https://placehold.co/800x600/FAD2D8/C81E1E?text=Zenoo+Editorial"
+            }
+            alt="Made for Everyday"
+            className="w-full h-full object-cover"
+          />
+        </div>
+
+        <div className="md:col-span-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 pl-0 md:pl-4">
+          <div className="space-y-4 max-w-xs">
+            <h2 className="font-editorial text-3xl sm:text-4xl font-bold text-[#C81E1E] leading-tight">
+              Made for
+              <br />
+              Everyday <span className="text-2xl align-top">✦</span>
+            </h2>
+            <p className="text-sm text-[#5C494B] leading-relaxed">
+              Thoughtful pieces, modern silhouettes, and timeless comfort — designed for the moments you live in, not just look at.
+            </p>
+            <Link
+              href="/search"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full border border-[#D4B3AE] bg-[#FFFDFB] text-xs font-semibold text-[#C81E1E] hover:bg-[#FAD2D8]/50 transition"
+            >
+              Shop the Look <span>→</span>
+            </Link>
+          </div>
+
+          {/* Right Mini Accent Card */}
+          {featured[2] && (
+            <Link
+              href={`/products/${featured[2].slug}`}
+              className="w-36 sm:w-40 shrink-0 group"
+            >
+              <div className="aspect-[3/4] rounded-2xl overflow-hidden bg-[#CFE2F7] border border-[#EAD9D6] shadow-sm">
+                <img
+                  src={featured[2].variants[0]?.image_url || "https://placehold.co/300x400"}
+                  alt={featured[2].name}
+                  className="w-full h-full object-cover group-hover:scale-105 transition duration-500"
+                />
+              </div>
+              <div className="flex items-center justify-center gap-1.5 mt-3">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#C81E1E]" />
+                <span className="w-1.5 h-1.5 rounded-full bg-[#D8BEBA]" />
+                <span className="w-1.5 h-1.5 rounded-full bg-[#D8BEBA]" />
+              </div>
+            </Link>
+          )}
+        </div>
+      </section>
+
+      {/* ✦ Flash Sales & Today's Deals */}
+      <section id="flash-sales" className="space-y-5">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+          <div className="flex items-center gap-2.5">
+            <span className="text-[#C81E1E] text-xl">✦</span>
+            <div>
+              <h2 className="font-editorial text-2xl sm:text-3xl font-bold text-[#C81E1E]">
+                Flash Drops &amp; Deals
+              </h2>
+              <p className="text-xs text-[#6E5A5C]">Limited-edition runs before stock sells out.</p>
+            </div>
+          </div>
+          <div className="font-mono text-xs font-bold bg-[#C81E1E] text-white px-4 py-2 rounded-full w-fit shadow-xs">
             Ends in {hours}:{mins}:{secs}
           </div>
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
-          {deals.map((p) => (
-            <ProductCard key={`deal-${p.id}`} product={p} badge="Deal" />
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-5">
+          {deals.map((p, idx) => (
+            <EditorialCard key={`deal-${p.id}`} product={p} index={idx + 1} badge="Deal" />
           ))}
         </div>
       </section>
 
-      {/* Featured Products */}
-      <section id="featured" className="space-y-6">
-        <h2 className="text-2xl font-bold">Featured Products</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
-          {featured.map((p) => (
-            <ProductCard key={`feat-${p.id}`} product={p} badge="Featured" />
+      {/* ✦ Bestselling Objects & Apparel */}
+      <section id="bestsellers" className="space-y-5">
+        <div className="flex items-center gap-2.5">
+          <span className="text-[#C81E1E] text-xl">✦</span>
+          <h2 className="font-editorial text-2xl sm:text-3xl font-bold text-[#C81E1E]">
+            Most Loved Pieces
+          </h2>
+        </div>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-5">
+          {bestsellers.map((p, idx) => (
+            <EditorialCard key={`best-${p.id}`} product={p} index={idx + 2} badge="Popular" />
           ))}
         </div>
       </section>
 
-      {/* Discount Banner */}
-      <section className="rounded-2xl bg-gray-100 border p-8 md:p-10 flex flex-col md:flex-row items-center justify-between gap-4">
-        <div>
-          <p className="text-xs uppercase font-bold tracking-wider text-gray-500">Limited Offer</p>
-          <h3 className="text-2xl font-bold mt-1">Flat 20% Off on Your First UPI Order</h3>
-          <p className="text-sm text-gray-600 mt-1">Zero gateway fees. Instant order confirmation.</p>
-        </div>
-        <Link
-          href="/cart"
-          className="px-6 py-3 bg-black text-white rounded-lg text-sm font-medium hover:bg-gray-800"
-        >
-          Claim Offer
-        </Link>
-      </section>
-
-      {/* Bestselling Products */}
-      <section id="bestsellers" className="space-y-6">
-        <h2 className="text-2xl font-bold">Bestselling Products</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
-          {bestsellers.map((p) => (
-            <ProductCard key={`best-${p.id}`} product={p} badge="Bestseller" />
-          ))}
-        </div>
-      </section>
-
-      {/* Seasonal Collections */}
-      <section id="collections" className="space-y-6">
-        <h2 className="text-2xl font-bold">Seasonal Collections</h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {[
-            { title: "Winter Streetwear", desc: "Heavyweight hoodies & layers", tag: "Winter 2026" },
-            { title: "Minimalist Essentials", desc: "Clean cuts for everyday wear", tag: "Core" },
-            { title: "Tech & Desk Gear", desc: "Upgrades for your workspace", tag: "New Drop" },
-          ].map((col) => (
-            <div key={col.title} className="border rounded-2xl p-6 bg-gray-50 flex flex-col justify-between min-h-40">
-              <div>
-                <span className="text-xs uppercase font-semibold text-gray-500">{col.tag}</span>
-                <h3 className="text-xl font-bold mt-1">{col.title}</h3>
-                <p className="text-sm text-gray-600 mt-1">{col.desc}</p>
-              </div>
-              <a href="#featured" className="text-sm font-medium underline mt-4">
-                Explore Collection →
-              </a>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* New Arrivals */}
-      <section id="new-arrivals" className="space-y-6">
-        <h2 className="text-2xl font-bold">New Arrivals</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
-          {newArrivals.map((p) => (
-            <ProductCard key={`new-${p.id}`} product={p} badge="New" />
-          ))}
-        </div>
-      </section>
-
-      {/* Trending & Recommended */}
-      <section className="space-y-6">
-        <h2 className="text-2xl font-bold">Trending Now</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
-          {trending.map((p) => (
-            <ProductCard key={`trend-${p.id}`} product={p} badge="Trending" />
-          ))}
-        </div>
-      </section>
-
-      <section className="space-y-6">
-        <h2 className="text-2xl font-bold">Recommended for You</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
-          {recommended.map((p) => (
-            <ProductCard key={`rec-${p.id}`} product={p} />
-          ))}
-        </div>
-      </section>
-
-      {/* Recently Viewed Products */}
+      {/* Recently Viewed */}
       {recentlyViewed.length > 0 && (
-        <section className="space-y-6">
-          <h2 className="text-2xl font-bold">Recently Viewed</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
-            {recentlyViewed.slice(0, 4).map((p) => (
-              <ProductCard key={`recent-${p.id}`} product={p} />
+        <section className="space-y-5">
+          <div className="flex items-center gap-2.5">
+            <span className="text-[#C81E1E] text-xl">✦</span>
+            <h2 className="font-editorial text-2xl font-bold text-[#C81E1E]">Recently Viewed</h2>
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-5">
+            {recentlyViewed.slice(0, 4).map((p, idx) => (
+              <EditorialCard key={`recent-${p.id}`} product={p} index={idx} />
             ))}
           </div>
         </section>
       )}
 
-      {/* Brand Showcase */}
-      <section className="border-y py-10">
-        <p className="text-center text-xs uppercase tracking-widest text-gray-500 mb-6">
-          Featured Merchant Brands
-        </p>
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-6 text-center font-bold text-lg text-gray-400">
-          <span>NORTHLINE</span>
-          <span>KINETIC</span>
-          <span>MONO STUDIO</span>
-          <span>VELOURA</span>
-          <span>CRAFTLAB</span>
-        </div>
-      </section>
-
-      {/* Customer Testimonials */}
-      <section className="space-y-6">
-        <h2 className="text-2xl font-bold text-center">What Our Customers Say</h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      {/* Editorial Testimonials */}
+      <section className="rounded-[26px] bg-[#FAD2D8]/55 border border-[#F2C3CB] p-7 sm:p-10 space-y-6">
+        <h2 className="font-editorial text-2xl sm:text-3xl font-bold text-[#C81E1E] text-center">
+          ✦ Notes from Our Community
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
           {[
-            { name: "Rohan M.", text: "Super fast delivery and the hoodie fabric feels genuinely heavyweight." },
-            { name: "Ananya S.", text: "UPI checkout took 10 seconds and I love supporting independent merchants." },
+            { name: "Rohan M.", text: "Super fast delivery and the heavyweight fabric feels genuinely luxe." },
+            { name: "Ananya S.", text: "Checkout took 10 seconds and every piece feels thoughtfully curated." },
             { name: "Kabir V.", text: "Clean storefront, accurate sizing, and zero hassle on my order." },
           ].map((t) => (
-            <div key={t.name} className="border rounded-2xl p-6 bg-white space-y-3">
-              <p className="text-sm text-gray-600">&ldquo;{t.text}&rdquo;</p>
-              <p className="text-sm font-semibold">— {t.name}</p>
+            <div
+              key={t.name}
+              className="border border-[#EAD9D6] rounded-2xl p-5 bg-[#FFFDFB] space-y-2.5 shadow-xs"
+            >
+              <p className="text-sm text-[#4A383A] leading-relaxed">&ldquo;{t.text}&rdquo;</p>
+              <p className="text-xs font-bold text-[#C81E1E]">— {t.name}</p>
             </div>
           ))}
         </div>
