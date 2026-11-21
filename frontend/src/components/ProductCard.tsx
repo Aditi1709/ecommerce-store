@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { Product, formatPrice } from "@/lib/api";
 import { useCart } from "@/context/CartContext";
+import { getAestheticImage } from "@/lib/productImage";
 
 interface ProductCardProps {
   product: Product;
@@ -23,6 +24,10 @@ export default function ProductCard({ product, tintIndex = 0 }: ProductCardProps
   const [liked, setLiked] = useState(false);
 
   const primaryVariant = product.variants[0];
+  const initialSrc = getAestheticImage(product, primaryVariant?.image_url);
+  const fallbackSrc = getAestheticImage(product, null);
+  const [imgSrc, setImgSrc] = useState(initialSrc);
+
   const inStock = primaryVariant ? primaryVariant.stock_qty > 0 : false;
   const variantLabel = primaryVariant
     ? Object.values(primaryVariant.attributes || {}).join(" / ") || primaryVariant.sku
@@ -41,7 +46,7 @@ export default function ProductCard({ product, tintIndex = 0 }: ProductCardProps
       sku: primaryVariant.sku,
       label: variantLabel,
       priceMinor: primaryVariant.price_minor,
-      imageUrl: primaryVariant.image_url,
+      imageUrl: imgSrc,
     });
     setAdded(true);
     setTimeout(() => setAdded(false), 1400);
@@ -54,12 +59,14 @@ export default function ProductCard({ product, tintIndex = 0 }: ProductCardProps
         className={`relative aspect-square w-full overflow-hidden rounded-xl ${tintClass}`}
       >
         <img
-          src={primaryVariant?.image_url || "https://placehold.co/600x600/FAD5DC/C81E1E?text=Zenoo"}
+          src={imgSrc}
           alt={product.name}
+          onError={() => {
+            if (imgSrc !== fallbackSrc) setImgSrc(fallbackSrc);
+          }}
           className="h-full w-full object-cover object-center transition-transform duration-500 ease-out group-hover:scale-105"
         />
 
-        {/* Top-Right Heart Button */}
         <button
           type="button"
           onClick={(e) => {
@@ -68,7 +75,7 @@ export default function ProductCard({ product, tintIndex = 0 }: ProductCardProps
             setLiked((v) => !v);
           }}
           aria-label="Save to wishlist"
-          className="absolute top-2.5 right-2.5 w-7 h-7 rounded-full bg-white/85 backdrop-blur-sm flex items-center justify-center text-[#231819] hover:text-[#C81E1E] transition shadow-xs"
+          className="absolute top-2.5 right-2.5 w-7 h-7 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center text-[#231819] hover:text-[#C81E1E] transition shadow-xs"
         >
           <svg
             className="w-4 h-4"
@@ -92,7 +99,6 @@ export default function ProductCard({ product, tintIndex = 0 }: ProductCardProps
         )}
       </Link>
 
-      {/* Bottom Title, Price & Circular Crimson '+' Button */}
       <div className="pt-3 px-1 flex items-center justify-between gap-2">
         <div className="min-w-0">
           <Link

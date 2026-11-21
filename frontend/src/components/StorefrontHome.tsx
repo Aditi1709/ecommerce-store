@@ -4,6 +4,7 @@ import { useEffect, useMemo, useRef, useState, useSyncExternalStore } from "reac
 import Link from "next/link";
 import { Product, formatPrice } from "@/lib/api";
 import { useCart } from "@/context/CartContext";
+import { getAestheticImage } from "@/lib/productImage";
 
 const EMPTY_LIST = "[]";
 const subscribeStorage = (cb: () => void) => {
@@ -34,6 +35,10 @@ function EditorialCard({
   const [liked, setLiked] = useState(false);
 
   const firstVariant = product.variants[0];
+  const primarySrc = getAestheticImage(product, firstVariant?.image_url);
+  const fallbackSrc = getAestheticImage(product, null);
+  const [imgSrc, setImgSrc] = useState(primarySrc);
+
   const inStock = firstVariant ? firstVariant.stock_qty > 0 : false;
   const tint = CARD_TINTS[index % CARD_TINTS.length];
 
@@ -48,7 +53,7 @@ function EditorialCard({
       sku: firstVariant.sku,
       label: Object.values(firstVariant.attributes || {}).join(" / ") || firstVariant.sku,
       priceMinor: firstVariant.price_minor,
-      imageUrl: firstVariant.image_url,
+      imageUrl: imgSrc,
     });
     setAdded(true);
     setTimeout(() => setAdded(false), 1400);
@@ -61,8 +66,11 @@ function EditorialCard({
         className={`relative aspect-square rounded-xl overflow-hidden ${tint}`}
       >
         <img
-          src={firstVariant?.image_url || "https://placehold.co/600x600/FAD5DC/C81E1E?text=Zenoo"}
+          src={imgSrc}
           alt={product.name}
+          onError={() => {
+            if (imgSrc !== fallbackSrc) setImgSrc(fallbackSrc);
+          }}
           className="w-full h-full object-cover group-hover:scale-105 transition duration-500"
         />
 
@@ -80,7 +88,7 @@ function EditorialCard({
             setLiked((v) => !v);
           }}
           aria-label="Favorite"
-          className="absolute top-2.5 right-2.5 w-7 h-7 rounded-full bg-white/85 backdrop-blur-sm flex items-center justify-center text-[#231819] hover:text-[#C81E1E] transition"
+          className="absolute top-2.5 right-2.5 w-7 h-7 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center text-[#231819] hover:text-[#C81E1E] transition"
         >
           <svg
             className="w-4 h-4"
@@ -189,11 +197,8 @@ export default function StorefrontHome({ products }: { products: Product[] }) {
 
   return (
     <main className="max-w-6xl mx-auto px-5 sm:px-8 py-7 space-y-14">
-      {/* Split Editorial Hero (MODOA-inspired) */}
       <section className="grid grid-cols-1 md:grid-cols-2 gap-5">
-        {/* Left Blush-Pink Editorial Card */}
         <div className="relative rounded-[26px] bg-[#FAD2D8] p-8 sm:p-11 flex flex-col justify-between min-h-[340px] sm:min-h-[390px] overflow-hidden border border-[#F3BFC8]">
-          {/* Top-right 4-point crimson sparkle */}
           <span
             aria-hidden="true"
             className="absolute top-7 right-8 text-[#C81E1E] text-3xl leading-none select-none"
@@ -220,7 +225,6 @@ export default function StorefrontHome({ products }: { products: Product[] }) {
               Explore Collection <span>→</span>
             </a>
 
-            {/* Decorative 3x3 crimson dot matrix */}
             <div className="grid grid-cols-3 gap-1.5 opacity-70" aria-hidden="true">
               {Array.from({ length: 9 }).map((_, idx) => (
                 <span key={idx} className="w-1.5 h-1.5 rounded-full bg-[#C81E1E]" />
@@ -229,23 +233,19 @@ export default function StorefrontHome({ products }: { products: Product[] }) {
           </div>
         </div>
 
-        {/* Right Showcase Visual Card */}
         <Link
           href={heroProduct ? `/products/${heroProduct.slug}` : "/search"}
           className="group relative rounded-[26px] bg-[#F2D5C8] overflow-hidden min-h-[340px] sm:min-h-[390px] border border-[#EBC5B6] flex items-center justify-center"
         >
-          {heroProduct?.variants[0]?.image_url ? (
-            <img
-              src={heroProduct.variants[0].image_url}
-              alt={heroProduct.name}
-              className="w-full h-full object-cover group-hover:scale-105 transition duration-700"
-            />
-          ) : (
-            <div className="text-center p-8">
-              <p className="font-editorial text-3xl text-[#C81E1E] font-bold">Zenoo Studio</p>
-              <p className="text-xs text-[#6E5A5C] mt-1">Season 2026 Capsule</p>
-            </div>
-          )}
+          <img
+            src={
+              heroProduct
+                ? getAestheticImage(heroProduct, heroProduct.variants[0]?.image_url)
+                : "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=900&q=80"
+            }
+            alt={heroProduct?.name || "Zenoo Studio"}
+            className="w-full h-full object-cover group-hover:scale-105 transition duration-700"
+          />
 
           {heroProduct && (
             <div className="absolute bottom-4 left-4 right-4 bg-[#FAF3EB]/92 backdrop-blur-md rounded-2xl px-4 py-3 flex items-center justify-between border border-[#EAD9D6]">
@@ -263,7 +263,6 @@ export default function StorefrontHome({ products }: { products: Product[] }) {
         </Link>
       </section>
 
-      {/* Filter Pills + Quick Search */}
       <section className="space-y-4">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
           <div className="flex flex-wrap gap-2">
@@ -310,7 +309,6 @@ export default function StorefrontHome({ products }: { products: Product[] }) {
         </div>
       </section>
 
-      {/* Search / Category Filter Results */}
       {isFiltering && (
         <section ref={resultsRef} className="space-y-5">
           <div className="flex items-center gap-2">
@@ -331,13 +329,10 @@ export default function StorefrontHome({ products }: { products: Product[] }) {
         </section>
       )}
 
-      {/* Continue Shopping (Active Cart Items) */}
       {cartItems.length > 0 && (
         <section className="border border-[#F1C5CC] rounded-[24px] p-5 sm:p-6 bg-[#FAD2D8]/35">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="font-editorial text-xl font-bold text-[#C81E1E]">
-              ✦ In Your Bag
-            </h2>
+            <h2 className="font-editorial text-xl font-bold text-[#C81E1E]">✦ In Your Bag</h2>
             <Link href="/cart" className="text-xs font-semibold text-[#C81E1E] underline">
               Open Bag ({cartItems.length}) →
             </Link>
@@ -350,7 +345,11 @@ export default function StorefrontHome({ products }: { products: Product[] }) {
                 className="flex items-center gap-3 bg-[#FFFDFB] border border-[#EAD9D6] rounded-2xl p-2.5 hover:border-[#C81E1E] transition"
               >
                 <img
-                  src={item.imageUrl || "https://placehold.co/100x100"}
+                  src={
+                    item.imageUrl && !item.imageUrl.includes("placehold.co")
+                      ? item.imageUrl
+                      : "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=200&q=80"
+                  }
                   alt={item.productName}
                   className="w-12 h-12 object-cover rounded-xl"
                 />
@@ -364,7 +363,6 @@ export default function StorefrontHome({ products }: { products: Product[] }) {
         </section>
       )}
 
-      {/* ✦ New Favorites (MODOA Signature 4-Card Row with Crimson Progress Divider) */}
       <section id="new-arrivals" className="space-y-5">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2.5">
@@ -387,7 +385,6 @@ export default function StorefrontHome({ products }: { products: Product[] }) {
           ))}
         </div>
 
-        {/* Signature Crimson Progress Bar Divider */}
         <div className="pt-2">
           <div className="h-[2px] w-full bg-[#EAD9D6] rounded-full overflow-hidden">
             <div className="h-full w-1/4 bg-[#C81E1E] rounded-full" />
@@ -395,14 +392,13 @@ export default function StorefrontHome({ products }: { products: Product[] }) {
         </div>
       </section>
 
-      {/* "Made for Everyday ✦" Editorial Split Section (MODOA-inspired) */}
       <section id="collections" className="grid grid-cols-1 md:grid-cols-12 gap-6 items-center py-2">
         <div className="md:col-span-6 rounded-[26px] overflow-hidden bg-[#F1D4C6] border border-[#EAD9D6] aspect-[4/3]">
           <img
             src={
-              secondaryStoryProduct?.variants[0]?.image_url ||
-              heroProduct?.variants[0]?.image_url ||
-              "https://placehold.co/800x600/FAD2D8/C81E1E?text=Zenoo+Editorial"
+              secondaryStoryProduct
+                ? getAestheticImage(secondaryStoryProduct, secondaryStoryProduct.variants[0]?.image_url)
+                : "https://images.unsplash.com/photo-1567538096630-e0c55bd6374c?auto=format&fit=crop&w=800&q=80"
             }
             alt="Made for Everyday"
             className="w-full h-full object-cover"
@@ -427,7 +423,6 @@ export default function StorefrontHome({ products }: { products: Product[] }) {
             </Link>
           </div>
 
-          {/* Right Mini Accent Card */}
           {featured[2] && (
             <Link
               href={`/products/${featured[2].slug}`}
@@ -435,7 +430,7 @@ export default function StorefrontHome({ products }: { products: Product[] }) {
             >
               <div className="aspect-[3/4] rounded-2xl overflow-hidden bg-[#CFE2F7] border border-[#EAD9D6] shadow-sm">
                 <img
-                  src={featured[2].variants[0]?.image_url || "https://placehold.co/300x400"}
+                  src={getAestheticImage(featured[2], featured[2].variants[0]?.image_url)}
                   alt={featured[2].name}
                   className="w-full h-full object-cover group-hover:scale-105 transition duration-500"
                 />
@@ -450,7 +445,6 @@ export default function StorefrontHome({ products }: { products: Product[] }) {
         </div>
       </section>
 
-      {/* ✦ Flash Sales & Today's Deals */}
       <section id="flash-sales" className="space-y-5">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
           <div className="flex items-center gap-2.5">
@@ -473,7 +467,6 @@ export default function StorefrontHome({ products }: { products: Product[] }) {
         </div>
       </section>
 
-      {/* ✦ Bestselling Objects & Apparel */}
       <section id="bestsellers" className="space-y-5">
         <div className="flex items-center gap-2.5">
           <span className="text-[#C81E1E] text-xl">✦</span>
@@ -488,7 +481,6 @@ export default function StorefrontHome({ products }: { products: Product[] }) {
         </div>
       </section>
 
-      {/* Recently Viewed */}
       {recentlyViewed.length > 0 && (
         <section className="space-y-5">
           <div className="flex items-center gap-2.5">
@@ -503,7 +495,6 @@ export default function StorefrontHome({ products }: { products: Product[] }) {
         </section>
       )}
 
-      {/* Editorial Testimonials */}
       <section className="rounded-[26px] bg-[#FAD2D8]/55 border border-[#F2C3CB] p-7 sm:p-10 space-y-6">
         <h2 className="font-editorial text-2xl sm:text-3xl font-bold text-[#C81E1E] text-center">
           ✦ Notes from Our Community

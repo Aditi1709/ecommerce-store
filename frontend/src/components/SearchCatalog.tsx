@@ -3,6 +3,8 @@
 import { useMemo, useState } from "react";
 import Link from "next/link";
 import { Product, formatPrice } from "@/lib/api";
+import { getAestheticImage } from "@/lib/productImage";
+import { useCart } from "@/context/CartContext";
 import {
   POPULAR_SEARCHES,
   TRENDING_SEARCHES,
@@ -606,61 +608,78 @@ export default function SearchCatalog({
         {/* Product Grid */}
         <section className="lg:col-span-3">
           {filtered.length > 0 ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-              {filtered.map((item) => {
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
+              {filtered.map((item, idx) => {
                 const p = item.product;
                 const firstVariant = p.variants?.[0];
+                const imgSrc = getAestheticImage(p, firstVariant?.image_url);
+                const tints = ["bg-[#FAD5DC]", "bg-[#CFE2F7]", "bg-[#F6D7DF]", "bg-[#EFE7DD]"];
+                const tint = tints[idx % tints.length];
                 return (
                   <Link
                     key={p.id}
                     href={`/products/${p.slug}`}
-                    className="group border rounded-xl overflow-hidden hover:shadow-md transition bg-white flex flex-col"
+                    className="group bg-[#FFFDFB] border border-[#EFE0DD] rounded-2xl p-3 shadow-[0_6px_20px_rgba(140,45,55,0.05)] hover:shadow-[0_12px_28px_rgba(200,30,30,0.12)] transition flex flex-col"
                   >
-                    <div className="relative aspect-square bg-gray-100 overflow-hidden">
+                    <div className={`relative aspect-square rounded-xl ${tint} overflow-hidden`}>
                       <img
-                        src={firstVariant?.image_url || "https://placehold.co/600x600"}
+                        src={imgSrc}
                         alt={p.name}
-                        className="w-full h-full object-cover group-hover:scale-105 transition duration-300"
+                        onError={(e) => {
+                          const el = e.currentTarget;
+                          const fb = getAestheticImage(p, null);
+                          if (el.src !== fb) el.src = fb;
+                        }}
+                        className="w-full h-full object-cover group-hover:scale-105 transition duration-500"
                       />
                       {item.discountPct > 0 && (
-                        <span className="absolute top-3 left-3 bg-red-600 text-white text-xs px-2 py-0.5 rounded-full font-medium">
+                        <span className="absolute top-2.5 left-2.5 bg-[#C81E1E] text-white text-[10px] px-2.5 py-0.5 rounded-full font-semibold">
                           {item.discountPct}% OFF
                         </span>
                       )}
                       {!item.inStock && (
-                        <span className="absolute top-3 right-3 bg-black/75 text-white text-xs px-2 py-0.5 rounded-full">
-                          Out of Stock
+                        <span className="absolute top-2.5 right-2.5 bg-[#231819]/80 text-white text-[10px] px-2.5 py-0.5 rounded-full">
+                          Sold Out
                         </span>
                       )}
                     </div>
-                    <div className="p-4 flex-1 flex flex-col justify-between space-y-2">
+                    <div className="pt-3 px-1 flex-1 flex flex-col justify-between space-y-2">
                       <div>
-                        <p className="text-[11px] text-gray-500 uppercase">
+                        <p className="text-[10px] text-[#9B7E80] uppercase font-semibold tracking-wider">
                           {item.brand} • {item.categoryName}
                         </p>
-                        <h3 className="font-semibold mt-0.5 line-clamp-1">{p.name}</h3>
-                        <p className="text-xs text-amber-600 mt-1">
-                          ★ {item.rating.toFixed(1)} • {item.material}
+                        <h3 className="font-semibold text-sm text-[#231819] group-hover:text-[#C81E1E] transition mt-0.5 line-clamp-1">
+                          {p.name}
+                        </h3>
+                        <p className="text-[11px] text-[#7D6668] mt-0.5">
+                          ✦ {item.rating.toFixed(1)} • {item.material}
                         </p>
                       </div>
-                      <p className="font-bold">
-                        {firstVariant ? formatPrice(firstVariant.price_minor) : "Unavailable"}
-                      </p>
+                      <div className="flex items-center justify-between pt-1">
+                        <p className="font-bold text-sm text-[#C81E1E]">
+                          {firstVariant ? formatPrice(firstVariant.price_minor) : "Unavailable"}
+                        </p>
+                        <span className="w-7 h-7 rounded-full bg-[#C81E1E] text-white text-sm font-bold flex items-center justify-center group-hover:bg-[#A81818] transition">
+                          +
+                        </span>
+                      </div>
                     </div>
                   </Link>
                 );
               })}
             </div>
           ) : (
-            <div className="border rounded-2xl p-10 text-center space-y-4 bg-gray-50">
-              <h2 className="text-xl font-bold">No products match your filters</h2>
-              <p className="text-sm text-gray-600">
+            <div className="border border-[#EAD9D6] rounded-2xl p-10 text-center space-y-4 bg-[#FAD2D8]/30">
+              <h2 className="font-editorial text-2xl font-bold text-[#C81E1E]">
+                No products match your filters
+              </h2>
+              <p className="text-sm text-[#5C494B]">
                 Try clearing some filters or exploring popular searches below.
               </p>
               <button
                 type="button"
                 onClick={clearAllFilters}
-                className="px-5 py-2 bg-black text-white rounded-lg text-sm font-medium hover:bg-gray-800"
+                className="px-5 py-2.5 bg-[#C81E1E] text-white rounded-full text-xs font-semibold hover:bg-[#A81818]"
               >
                 Clear All Filters
               </button>
@@ -669,7 +688,7 @@ export default function SearchCatalog({
                   <Link
                     key={term}
                     href={`/search?q=${encodeURIComponent(term)}`}
-                    className="px-3 py-1.5 rounded-full bg-white border text-xs hover:border-black"
+                    className="px-3.5 py-1.5 rounded-full bg-[#FFFDFB] border border-[#E4CFC9] text-xs hover:border-[#C81E1E] hover:text-[#C81E1E]"
                   >
                     {term}
                   </Link>
