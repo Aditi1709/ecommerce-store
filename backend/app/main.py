@@ -2,6 +2,18 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+import sys
+from pathlib import Path
+
+_BACKEND_DIR = str(Path(__file__).resolve().parent.parent)
+if _BACKEND_DIR not in sys.path:
+    sys.path.insert(0, _BACKEND_DIR)
+
+try:
+    from seed_womens import reseed_womens
+except Exception as _seed_err:
+    reseed_womens = None
+
 from app.core.database import engine
 from seed_womens import reseed_womens
 from app.models.product import Base
